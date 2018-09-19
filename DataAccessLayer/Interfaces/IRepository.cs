@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheWitcher.Domain.Interfaces
+namespace DataAccessLayer.Interfaces
 {
-    public interface IRepository<T> : IDisposable
+    interface IRepository<T> : IDisposable
     {
         IEnumerable<T> GetItemList();
         T GetItem(int id);
