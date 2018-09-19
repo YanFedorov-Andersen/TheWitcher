@@ -10,8 +10,8 @@ namespace DataAccessLayer.Interfaces
     {
         IEnumerable<T> GetItemList();
         T GetItem(int id);
-        void Create(T item);
-        void Update(T item);
-        void Delete(int id);
+        int Create(T item);
+        int Update(T item);
+        int Delete(int id);
     }
 }
