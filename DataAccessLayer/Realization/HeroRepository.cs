@@ -1,17 +1,14 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataAccessLayer.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.Entity;
 
 namespace DataAccessLayer.Realization
 {
     public class HeroRepository : IRepository<Heroes>
     {
-        private TheWitcherEntities _dataBase;
+        private readonly TheWitcherEntities _dataBase;
         public HeroRepository()
         {
             _dataBase = new TheWitcherEntities();

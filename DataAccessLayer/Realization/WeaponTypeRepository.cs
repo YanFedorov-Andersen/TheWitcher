@@ -1,26 +1,23 @@
 ﻿using DataAccessLayer.Core;
 using DataAccessLayer.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Realization
 {
     public class WeaponsTypeRepository : IRepository<WeaponsType>
     {
-        private TheWitcherEntities _dataBase;
+        private readonly TheWitcherEntities _dataBase;
         public WeaponsTypeRepository()
         {
             _dataBase = new TheWitcherEntities();
         }
-        public int Create(Weapons item)
+        public int Create(WeaponsType item)
         {
             if (item != null)
             {
-                _dataBase.Weapons.Add(item);
+                _dataBase.WeaponsType.Add(item);
                 _dataBase.SaveChanges();
                 return item.Id;
             }
@@ -29,28 +26,28 @@ namespace DataAccessLayer.Realization
 
         public int Delete(int id)
         {
-            Weapons weaponType = _dataBase.Weapons.Find(id);
+            WeaponsType weaponType = _dataBase.WeaponsType.Find(id);
             if (weaponType == null)
             {
                 return -1;
             }
-            _dataBase.Weapons.Remove(weaponType);
+            _dataBase.WeaponsType.Remove(weaponType);
             _dataBase.SaveChanges();
             return id;
 
         }
 
-        public Weapons GetItem(int id)
+        public WeaponsType GetItem(int id)
         {
-            return _dataBase.Weapons.Find(id);
+            return _dataBase.WeaponsType.Find(id);
         }
 
-        public IEnumerable<Weapons> GetItemList()
+        public IEnumerable<WeaponsType> GetItemList()
         {
-            return _dataBase.Weapons.ToList();
+            return _dataBase.WeaponsType.ToList();
         }
 
-        public int Update(Weapons item)
+        public int Update(WeaponsType item)
         {
             if (item != null)
             {

@@ -1,17 +1,14 @@
 ﻿using DataAccessLayer.Core;
 using DataAccessLayer.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Realization
 {
     class WeaponRepository : IRepository<Weapons>
     {
-        private TheWitcherEntities _dataBase;
+        private readonly TheWitcherEntities _dataBase;
         public WeaponRepository()
         {
             _dataBase = new TheWitcherEntities();

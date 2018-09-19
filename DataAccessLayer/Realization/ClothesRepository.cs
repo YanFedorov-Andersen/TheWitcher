@@ -1,17 +1,14 @@
 ﻿using DataAccessLayer.Core;
 using DataAccessLayer.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Realization
 {
     public class ClothesRepository : IRepository<Clothes>
     {
-        private TheWitcherEntities _dataBase;
+        private readonly TheWitcherEntities _dataBase;
         public ClothesRepository()
         {
             _dataBase = new TheWitcherEntities();
