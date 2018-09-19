@@ -1,23 +1,23 @@
-﻿using DataAccessLayer.Interfaces;
-using DataAccessLayer.Core;
+﻿using DataAccessLayer.Core;
+using DataAccessLayer.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.Entity;
+using System.Linq;
 
 namespace DataAccessLayer.Realization
 {
-    public class HeroRepository : IRepository<Heroes>
+    public class QuestRepository : IRepository<Quest>
     {
         private readonly TheWitcherEntities _dataBase;
-        public HeroRepository()
+        public QuestRepository()
         {
             _dataBase = new TheWitcherEntities();
         }
-        public int Create(Heroes item)
+        public int Create(Quest item)
         {
             if (item != null)
             {
-                _dataBase.Heroes.Add(item);
+                _dataBase.Quest.Add(item);
                 _dataBase.SaveChanges();
                 return item.Id;
             }
@@ -26,30 +26,30 @@ namespace DataAccessLayer.Realization
 
         public int Delete(int id)
         {
-            Heroes hero = _dataBase.Heroes.Find(id);
-            if (hero == null)
+            Quest quest = _dataBase.Quest.Find(id);
+            if (quest == null)
             {
                 return -1;
             }
-            _dataBase.Heroes.Remove(hero);
+            _dataBase.Quest.Remove(quest);
             _dataBase.SaveChanges();
             return id;
 
         }
 
-        public Heroes GetItem(int id)
+        public Quest GetItem(int id)
         {
-            return _dataBase.Heroes.Find(id);
+            return _dataBase.Quest.Find(id);
         }
 
-        public IEnumerable<Heroes> GetItemList()
+        public IEnumerable<Quest> GetItemList()
         {
-            return _dataBase.Heroes.ToList();
+            return _dataBase.Quest.ToList();
         }
 
-        public int Update(Heroes item)
+        public int Update(Quest item)
         {
-            if(item != null)
+            if (item != null)
             {
                 _dataBase.Entry(item).State = EntityState.Modified;
                 _dataBase.SaveChanges();

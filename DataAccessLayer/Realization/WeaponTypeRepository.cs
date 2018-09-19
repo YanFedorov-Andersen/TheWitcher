@@ -1,23 +1,23 @@
-﻿using DataAccessLayer.Interfaces;
-using DataAccessLayer.Core;
+﻿using DataAccessLayer.Core;
+using DataAccessLayer.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.Entity;
+using System.Linq;
 
 namespace DataAccessLayer.Realization
 {
-    public class HeroRepository : IRepository<Heroes>
+    public class WeaponsTypeRepository : IRepository<WeaponsType>
     {
         private readonly TheWitcherEntities _dataBase;
-        public HeroRepository()
+        public WeaponsTypeRepository()
         {
             _dataBase = new TheWitcherEntities();
         }
-        public int Create(Heroes item)
+        public int Create(WeaponsType item)
         {
             if (item != null)
             {
-                _dataBase.Heroes.Add(item);
+                _dataBase.WeaponsType.Add(item);
                 _dataBase.SaveChanges();
                 return item.Id;
             }
@@ -26,30 +26,30 @@ namespace DataAccessLayer.Realization
 
         public int Delete(int id)
         {
-            Heroes hero = _dataBase.Heroes.Find(id);
-            if (hero == null)
+            WeaponsType weaponType = _dataBase.WeaponsType.Find(id);
+            if (weaponType == null)
             {
                 return -1;
             }
-            _dataBase.Heroes.Remove(hero);
+            _dataBase.WeaponsType.Remove(weaponType);
             _dataBase.SaveChanges();
             return id;
 
         }
 
-        public Heroes GetItem(int id)
+        public WeaponsType GetItem(int id)
         {
-            return _dataBase.Heroes.Find(id);
+            return _dataBase.WeaponsType.Find(id);
         }
 
-        public IEnumerable<Heroes> GetItemList()
+        public IEnumerable<WeaponsType> GetItemList()
         {
-            return _dataBase.Heroes.ToList();
+            return _dataBase.WeaponsType.ToList();
         }
 
-        public int Update(Heroes item)
+        public int Update(WeaponsType item)
         {
-            if(item != null)
+            if (item != null)
             {
                 _dataBase.Entry(item).State = EntityState.Modified;
                 _dataBase.SaveChanges();
