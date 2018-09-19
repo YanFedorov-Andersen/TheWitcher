@@ -10,6 +10,7 @@ namespace TheWitcher
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("init");
         }
     }
 }
