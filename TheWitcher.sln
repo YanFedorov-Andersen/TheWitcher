@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheWitcher", "TheWitcher\TheWitcher.csproj", "{7F35CBFD-D588-4E2C-8CE4-A098E7C7D6DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheWitcher.Console", "TheWitcher\TheWitcher.Console.csproj", "{7F35CBFD-D588-4E2C-8CE4-A098E7C7D6DF}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TheWitcherDBProject", "TheWitcherDBProject\TheWitcherDBProject.sqlproj", "{88635A49-ED5E-4F38-A6C9-467D68B7A45A}"
 EndProject
