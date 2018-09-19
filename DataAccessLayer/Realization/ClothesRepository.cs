@@ -9,9 +9,9 @@ namespace DataAccessLayer.Realization
     public class ClothesRepository : IRepository<Clothes>
     {
         private readonly TheWitcherEntities _dataBase;
-        public ClothesRepository()
+        public ClothesRepository(TheWitcherEntities dataBase)
         {
-            _dataBase = new TheWitcherEntities();
+            _dataBase = dataBase;
         }
         public int Create(Clothes item)
         {

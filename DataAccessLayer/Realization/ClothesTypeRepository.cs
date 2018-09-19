@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace DataAccessLayer.Realization
 {
-    class ClothesTypeRepository : IRepository<ClothesType>
+    public class ClothesTypeRepository : IRepository<ClothesType>
     {
         private readonly TheWitcherEntities _dataBase;
-        public ClothesTypeRepository()
+        public ClothesTypeRepository(TheWitcherEntities dataBase)
         {
-            _dataBase = new TheWitcherEntities();
+            _dataBase = dataBase;
         }
         public int Create(ClothesType item)
         {

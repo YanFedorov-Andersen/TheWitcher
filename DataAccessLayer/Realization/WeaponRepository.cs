@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace DataAccessLayer.Realization
 {
-    class WeaponRepository : IRepository<Weapons>
+    public class WeaponRepository : IRepository<Weapons>
     {
         private readonly TheWitcherEntities _dataBase;
-        public WeaponRepository()
+        public WeaponRepository(TheWitcherEntities dataBase)
         {
-            _dataBase = new TheWitcherEntities();
+            _dataBase = dataBase;
         }
         public int Create(Weapons item)
         {

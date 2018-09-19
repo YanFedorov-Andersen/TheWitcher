@@ -98,6 +98,7 @@
     <Compile Include="Realization\ClothesTypeRepository.cs" />
     <Compile Include="Realization\HeroRepository.cs" />
     <Compile Include="Realization\QuestRepository.cs" />
+    <Compile Include="Realization\UnitOfWork.cs" />
     <Compile Include="Realization\WeaponRepository.cs" />
     <Compile Include="Realization\WeaponTypeRepository.cs" />
   </ItemGroup>

@@ -9,9 +9,9 @@ namespace DataAccessLayer.Realization
     public class WeaponsTypeRepository : IRepository<WeaponsType>
     {
         private readonly TheWitcherEntities _dataBase;
-        public WeaponsTypeRepository()
+        public WeaponsTypeRepository(TheWitcherEntities dataBase)
         {
-            _dataBase = new TheWitcherEntities();
+            _dataBase = dataBase;
         }
         public int Create(WeaponsType item)
         {

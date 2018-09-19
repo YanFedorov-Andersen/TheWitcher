@@ -9,9 +9,9 @@ namespace DataAccessLayer.Realization
     public class QuestRepository : IRepository<Quest>
     {
         private readonly TheWitcherEntities _dataBase;
-        public QuestRepository()
+        public QuestRepository(TheWitcherEntities dataBase)
         {
-            _dataBase = new TheWitcherEntities();
+            _dataBase = dataBase;
         }
         public int Create(Quest item)
         {

@@ -9,9 +9,9 @@ namespace DataAccessLayer.Realization
     public class HeroRepository : IRepository<Heroes>
     {
         private readonly TheWitcherEntities _dataBase;
-        public HeroRepository()
+        public HeroRepository(TheWitcherEntities dataBase)
         {
-            _dataBase = new TheWitcherEntities();
+            _dataBase = dataBase;
         }
         public int Create(Heroes item)
         {
