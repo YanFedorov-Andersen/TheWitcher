@@ -94,7 +94,12 @@
     </Compile>
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Realization\ClothesRepository.cs" />
+    <Compile Include="Realization\ClothesTypeRepository.cs" />
     <Compile Include="Realization\HeroRepository.cs" />
+    <Compile Include="Realization\QuestRepository.cs" />
+    <Compile Include="Realization\WeaponRepository.cs" />
+    <Compile Include="Realization\WeaponTypeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Core\Model1.edmx">
