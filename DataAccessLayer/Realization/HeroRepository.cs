@@ -14,7 +14,7 @@ namespace DataAccessLayer.Realization
         private TheWitcherEntities _dataBase;
         public HeroRepository()
         {
-            this._dataBase = new TheWitcherEntities();
+            _dataBase = new TheWitcherEntities();
         }
         public int Create(Heroes item)
         {
