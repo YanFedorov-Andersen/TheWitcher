@@ -1,15 +1,10 @@
 ﻿using DataAccessLayer.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Realization
 {
     public class UnitOfWork
     {
-        private readonly TheWitcherEntities _dataBase;
+        private TheWitcherEntities _dataBase = new TheWitcherEntities();
         private ClothesRepository _clothesRepository;
         private ClothesTypeRepository _clothesTypeRepository;
         private HeroRepository _heroRepository;

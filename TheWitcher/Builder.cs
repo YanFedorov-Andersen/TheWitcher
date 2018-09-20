@@ -2,6 +2,7 @@
 using DataAccessLayer.Realization;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Core;
+
 namespace TheWitcher
 {
     public class Builder
@@ -9,6 +10,8 @@ namespace TheWitcher
         public static void ConfigureContainer()
         {
             var builder = new ContainerBuilder();
+
+            builder.RegisterType<TheWitcherEntities>().As<TheWitcherEntities>();
             builder.RegisterType<ClothesRepository>().As<IRepository<Clothes>>();
             builder.RegisterType<ClothesTypeRepository>().As<IRepository<ClothesType>>();
             builder.RegisterType<WeaponRepository>().As<IRepository<Weapons>>();
@@ -24,7 +27,6 @@ namespace TheWitcher
             IRepository<WeaponsType> weaponsType = container.Resolve<IRepository<WeaponsType>>();
             IRepository<Quest> quest = container.Resolve<IRepository<Quest>>();
             IRepository<Heroes> heroes = container.Resolve<IRepository<Heroes>>();
-
         }
     }
 }
