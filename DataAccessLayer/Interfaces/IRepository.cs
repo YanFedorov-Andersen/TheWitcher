@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Interfaces
 {
-    interface IRepository<T> 
+    public interface IRepository<T> 
     {
         IEnumerable<T> GetItemList();
         T GetItem(int id);
