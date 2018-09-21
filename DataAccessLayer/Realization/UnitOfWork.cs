@@ -22,7 +22,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_clothesRepository == null)
+                {
                     _clothesRepository = new ClothesRepository(_dataBase);
+                }
                 return _clothesRepository;
             }
         }
@@ -31,7 +33,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_heroInQuestRepository == null)
+                {
                     _heroInQuestRepository = new HeroInQuestRepository(_dataBase);
+                }
                 return _heroInQuestRepository;
             }
         }
@@ -40,7 +44,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_clothesTypeRepository == null)
+                {
                     _clothesTypeRepository = new ClothesTypeRepository(_dataBase);
+                }
                 return _clothesTypeRepository;
             }
         }
@@ -49,7 +55,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_weaponRepository == null)
+                {
                     _weaponRepository = new WeaponRepository(_dataBase);
+                }
                 return _weaponRepository;
             }
         }
@@ -58,7 +66,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_weaponsTypeRepository == null)
+                {
                     _weaponsTypeRepository = new WeaponsTypeRepository(_dataBase);
+                }
                 return _weaponsTypeRepository;
             }
         }
@@ -67,7 +77,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_questRepository == null)
+                {
                     _questRepository = new QuestRepository(_dataBase);
+                }
                 return _questRepository;
             }
         }
@@ -76,7 +88,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_heroRepository == null)
+                {
                     _heroRepository = new HeroRepository(_dataBase);
+                }
                 return _heroRepository;
             }
         }
@@ -85,7 +99,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_heroWeaponsRepository == null)
+                {
                     _heroWeaponsRepository = new HeroWeaponsRepository(_dataBase);
+                }
                 return _heroWeaponsRepository;
             }
         }
@@ -94,7 +110,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_heroClothesRepository == null)
+                {
                     _heroClothesRepository = new HeroClothesRepository(_dataBase);
+                }
                 return _heroClothesRepository;
             }
         }
@@ -113,7 +131,6 @@ namespace DataAccessLayer.Realization
             }
             catch (DbEntityValidationException dbEx)
             {
-                // add your exception handling code here
             }
             return true;
         }
@@ -121,10 +138,6 @@ namespace DataAccessLayer.Realization
         public void RollBack()
         {
             _dataBase.Database.CurrentTransaction.Rollback();
-        }
-        public Exception ReturnExeption()
-        {
-            return new Exception();
         }
     }
 }

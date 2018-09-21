@@ -9,13 +9,13 @@ namespace TheWitcher.Business
 {
     public class HeroService
     {
-        private IRepository<Heroes> _heroRepository;
-        private IRepository<Quest> _questRepository;
-        private IRepository<HeroInQuest> _heroInQuestRepository;
-        private IRepository<Clothes> _clothesRepository;
-        private IRepository<HeroClothes> _heroClothesRepository;
-        private IRepository<Weapons> _weaponsRepository;
-        private IRepository<HeroWeapon> _heroWeaponRepository;
+        private readonly IRepository<Heroes> _heroRepository;
+        private readonly IRepository<Quest> _questRepository;
+        private readonly IRepository<HeroInQuest> _heroInQuestRepository;
+        private readonly IRepository<Clothes> _clothesRepository;
+        private readonly IRepository<HeroClothes> _heroClothesRepository;
+        private readonly IRepository<Weapons> _weaponsRepository;
+        private readonly IRepository<HeroWeapon> _heroWeaponRepository;
         private readonly UnitOfWork _unitOfWork;
         public HeroService(UnitOfWork unitOfWork)
         {
@@ -30,6 +30,10 @@ namespace TheWitcher.Business
         }
         private int CountPowerOfHero(int id)
         {
+            if (id < 0)
+            {
+                return -1;
+            }
             int totalPower = 0;
             var hero = _heroRepository.GetItem(id);
             int clothesPower = hero.HeroClothes.Sum(x => x.Clothes.CombatPower).GetValueOrDefault();
@@ -40,6 +44,10 @@ namespace TheWitcher.Business
         }
         private bool ProcessCoefficient(Heroes hero, Quest quest, int heroPower)
         {
+            if(hero == null || quest == null)
+            {
+                return false;
+            }
             try
             {
                 int coefficient = heroPower / quest.Complexity.Value;
@@ -74,6 +82,10 @@ namespace TheWitcher.Business
 
         public bool TakeTheQuest(int heroId, int questId)
         {
+            if (heroId < 0 || questId < 0)
+            {
+                return false;
+            }
             var hero = _heroRepository.GetItem(heroId);
             var quest = _questRepository.GetItem(questId);
             int heroPower = CountPowerOfHero(heroId);
@@ -127,6 +139,10 @@ namespace TheWitcher.Business
         }
         public bool BuyClothes(int heroId, int clothesId)
         {
+            if (heroId < 0 || clothesId < 0)
+            {
+                return false;
+            }
             var hero = _heroRepository.GetItem(heroId);
             var cloth = _clothesRepository.GetItem(clothesId);
             if(hero.HeroMoney> cloth.PriceOfBuy && hero.AvailableWeight > cloth.ClothesWeight.Value)
@@ -160,6 +176,10 @@ namespace TheWitcher.Business
         }
         public bool BuyWeapons(int heroId, int weaponsId)
         {
+            if (heroId < 0 || weaponsId < 0)
+            {
+                return false;
+            }
             var hero = _heroRepository.GetItem(heroId);
             var weapon = _weaponsRepository.GetItem(weaponsId);
             if (hero.HeroMoney > weapon.PriceOfBuy && hero.AvailableWeight > weapon.WeaponWeight.Value)
@@ -193,6 +213,10 @@ namespace TheWitcher.Business
         }
         public bool SellWeapon(int heroId, int weaponsId)
         {
+            if (heroId < 0 || weaponsId < 0)
+            {
+                return false;
+            }
             var hero = _heroRepository.GetItem(heroId);
             var weapon = _weaponsRepository.GetItem(weaponsId);
             var heroWeapon = hero.HeroWeapon.FirstOrDefault(x => x.WeaponId == weaponsId);
@@ -215,6 +239,10 @@ namespace TheWitcher.Business
 
         public bool SellCloth(int heroId, int clothId)
         {
+            if (heroId < 0 || clothId < 0)
+            {
+                return false;
+            }
             var hero = _heroRepository.GetItem(heroId);
             var cloth = _clothesRepository.GetItem(clothId);
             var heroCloth = hero.HeroClothes.FirstOrDefault(x => x.ClothesId == clothId);

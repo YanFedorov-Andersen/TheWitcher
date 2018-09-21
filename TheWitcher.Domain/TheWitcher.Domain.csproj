@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Mappers\MapHeroes.cs" />
     <Compile Include="Models\HeroesDTO.cs" />
-    <Compile Include="Models\QuestDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,10 +10,10 @@ namespace TheWitcher.Domain.Models
     {
         public int Id { get; set; }
         public string HeroName { get; set; }
-        public Nullable<int> HeroLevel { get; set; }
+        public int HeroLevel { get; set; }
         public string HeroDescription { get; set; }
-        public Nullable<int> AvailableWeight { get; set; }
-        public Nullable<System.DateTime> ReleaseDate { get; set; }
-        public Nullable<int> HeroTotalPower { get; set; }
+        public int AvailableWeight { get; set; }
+        public DateTime ReleaseDate { get; set; }
+        public int HeroTotalPower { get; set; }
     }
 }
