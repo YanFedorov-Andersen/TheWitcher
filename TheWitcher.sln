@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccessLayer", "DataAcce
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{6BF1D4CE-9628-45AA-B782-5DEA24C6DD5E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheWitcher.Business", "TheWitcher.Business\TheWitcher.Business.csproj", "{FE52F0C5-FB73-482E-A330-0826434BEBB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheWitcher.Domain", "TheWitcher.Domain\TheWitcher.Domain.csproj", "{0A87E2F7-ADDE-47C3-97A7-6076C53E839F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +35,14 @@ Global
 		{6BF1D4CE-9628-45AA-B782-5DEA24C6DD5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BF1D4CE-9628-45AA-B782-5DEA24C6DD5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BF1D4CE-9628-45AA-B782-5DEA24C6DD5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE52F0C5-FB73-482E-A330-0826434BEBB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE52F0C5-FB73-482E-A330-0826434BEBB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE52F0C5-FB73-482E-A330-0826434BEBB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE52F0C5-FB73-482E-A330-0826434BEBB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A87E2F7-ADDE-47C3-97A7-6076C53E839F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A87E2F7-ADDE-47C3-97A7-6076C53E839F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A87E2F7-ADDE-47C3-97A7-6076C53E839F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A87E2F7-ADDE-47C3-97A7-6076C53E839F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

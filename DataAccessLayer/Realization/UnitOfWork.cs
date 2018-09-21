@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer.Core;
+using System;
+using System.Data.Entity.Validation;
 
 namespace DataAccessLayer.Realization
 {
@@ -11,13 +13,26 @@ namespace DataAccessLayer.Realization
         private WeaponRepository _weaponRepository;
         private WeaponsTypeRepository _weaponsTypeRepository;
         private QuestRepository _questRepository;
+        private HeroInQuestRepository _heroInQuestRepository;
+        private HeroClothesRepository _heroClothesRepository;
+        private HeroWeaponsRepository _heroWeaponsRepository;
+
         public ClothesRepository Clothes
-        {
+        {            
             get
             {
                 if (_clothesRepository == null)
                     _clothesRepository = new ClothesRepository(_dataBase);
                 return _clothesRepository;
+            }
+        }
+        public HeroInQuestRepository HeroInQuest
+        {
+            get
+            {
+                if (_heroInQuestRepository == null)
+                    _heroInQuestRepository = new HeroInQuestRepository(_dataBase);
+                return _heroInQuestRepository;
             }
         }
         public ClothesTypeRepository ClothesType
@@ -64,6 +79,52 @@ namespace DataAccessLayer.Realization
                     _heroRepository = new HeroRepository(_dataBase);
                 return _heroRepository;
             }
+        }
+        public HeroWeaponsRepository HeroWeapon
+        {
+            get
+            {
+                if (_heroWeaponsRepository == null)
+                    _heroWeaponsRepository = new HeroWeaponsRepository(_dataBase);
+                return _heroWeaponsRepository;
+            }
+        }
+        public HeroClothesRepository HeroClothes
+        {
+            get
+            {
+                if (_heroClothesRepository == null)
+                    _heroClothesRepository = new HeroClothesRepository(_dataBase);
+                return _heroClothesRepository;
+            }
+        }
+        public void BeginTransaction()
+        {
+            _dataBase.Database.BeginTransaction();
+        }
+
+        public bool EndTransaction()
+        {
+            try
+            {
+                _dataBase.SaveChanges();
+                _dataBase.Database.CurrentTransaction.Commit();
+
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                // add your exception handling code here
+            }
+            return true;
+        }
+
+        public void RollBack()
+        {
+            _dataBase.Database.CurrentTransaction.Rollback();
+        }
+        public Exception ReturnExeption()
+        {
+            return new Exception();
         }
     }
 }

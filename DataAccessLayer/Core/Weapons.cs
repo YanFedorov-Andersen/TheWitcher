@@ -26,6 +26,7 @@ namespace DataAccessLayer.Core
         public Nullable<int> WeaponAccessLevel { get; set; }
         public Nullable<decimal> WeaponWeight { get; set; }
         public string Characteristics { get; set; }
+        public Nullable<int> CombatPower { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HeroWeapon> HeroWeapon { get; set; }
