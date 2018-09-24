@@ -99,7 +99,7 @@ namespace TheWitcher.Business
             int heroPower = CountPowerOfHero(heroId);
             if (heroPower > quest.Complexity)
             {
-                if (hero.ReleaseDate < DateTime.Now || hero.ReleaseDate == null)
+                if (hero.ReleaseDate != null || hero.ReleaseDate < DateTime.Now)
                 {
                     ProcessCoefficient(hero, quest, heroPower);
 
@@ -231,7 +231,7 @@ namespace TheWitcher.Business
             _unitOfWork.BeginTransaction();
             try
             {
-               var x = _heroWeaponRepository.Delete(heroWeapon.Id);
+               var idOfDeletedItem = _heroWeaponRepository.Delete(heroWeapon.Id);
                 _heroRepository.Update(hero);
                 _unitOfWork.EndTransaction();
                 return true;
@@ -263,7 +263,7 @@ namespace TheWitcher.Business
             _unitOfWork.BeginTransaction();
             try
             {
-                var x = _heroClothesRepository.Delete(heroCloth.Id);
+                var idOfDeletedItem = _heroClothesRepository.Delete(heroCloth.Id);
                 _heroRepository.Update(hero);
                 _unitOfWork.EndTransaction();
                 return true;
