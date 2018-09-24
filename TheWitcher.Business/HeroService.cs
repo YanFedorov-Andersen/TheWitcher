@@ -18,6 +18,8 @@ namespace TheWitcher.Business
         private readonly IRepository<Weapons> _weaponsRepository;
         private readonly IRepository<HeroWeapon> _heroWeaponRepository;
         private readonly UnitOfWork _unitOfWork;
+        private const int COEFFICIENT_PRICE_SELLING_OBJECTS = 3;
+        private const bool ITEM_INITIAL_STATE = false;
         public HeroService(UnitOfWork unitOfWork)
         {
             _heroRepository = unitOfWork.Hero;
@@ -68,7 +70,7 @@ namespace TheWitcher.Business
             catch (Exception exeption)
             {
                 _unitOfWork.RollBack();
-                throw new Exception("Exeption: {0}", exeption);
+                throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
             }
         }
         public void CheckHeroQuests(int heroId)
@@ -121,20 +123,10 @@ namespace TheWitcher.Business
                         _unitOfWork.RollBack();
                         throw new NullReferenceException("Hero or quest in hero service probably null", nullRefExep);
                     }
-                    catch (InvalidOperationException e)
-                    {
-                        _unitOfWork.RollBack();
-                        throw new InvalidOperationException("Hero service 122", e);
-                    }
-                    catch (SqlException sqlExeption)
-                    {
-                        _unitOfWork.RollBack();
-                        throw new InvalidOperationException("Some problems with SQL Server", sqlExeption);
-                    }
                     catch (Exception exeption)
                     {
                         _unitOfWork.RollBack();
-                        throw new Exception("Exeption: {0}", exeption);
+                        throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
                     }
                 }
             }
@@ -159,8 +151,8 @@ namespace TheWitcher.Business
                     Heroes = hero,
                     ClothesId = clothesId,
                     Clothes = cloth,
-                    IsActive = false,
-                    PriceOfSell = cloth.PriceOfBuy / 3
+                    IsActive = ITEM_INITIAL_STATE,
+                    PriceOfSell = cloth.PriceOfBuy / COEFFICIENT_PRICE_SELLING_OBJECTS
                 };
                 _unitOfWork.BeginTransaction();
                 try
@@ -175,20 +167,10 @@ namespace TheWitcher.Business
                     _unitOfWork.RollBack();
                     throw new NullReferenceException("Hero in hero service probably null", nullRefExep);
                 }
-                catch (InvalidOperationException invalOperExep)
-                {
-                    _unitOfWork.RollBack();
-                    throw new InvalidOperationException("Hero service 193", invalOperExep);
-                }
-                catch (SqlException sqlExeption)
-                {
-                    _unitOfWork.RollBack();
-                    throw new InvalidOperationException("Some problems with SQL Server", sqlExeption);
-                }
                 catch (Exception exeption)
                 {
                     _unitOfWork.RollBack();
-                    throw new Exception("Exeption: {0}", exeption);
+                    throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
                 }
             }
             return false;
@@ -211,8 +193,8 @@ namespace TheWitcher.Business
                     Heroes = hero,
                     WeaponId = weaponsId,
                     Weapons = weapon,
-                    IsActive = false,
-                    PriceOfSell = weapon.PriceOfBuy / 3
+                    IsActive = ITEM_INITIAL_STATE,
+                    PriceOfSell = weapon.PriceOfBuy / COEFFICIENT_PRICE_SELLING_OBJECTS
                 };
                 _unitOfWork.BeginTransaction();
                 try
@@ -227,20 +209,10 @@ namespace TheWitcher.Business
                     _unitOfWork.RollBack();
                     throw new NullReferenceException("Hero in hero service probably null", nullRefExep);
                 }
-                catch (InvalidOperationException invalOperExep)
-                {
-                    _unitOfWork.RollBack();
-                    throw new InvalidOperationException("Hero service 245", invalOperExep);
-                }
-                catch (SqlException sqlExeption)
-                {
-                    _unitOfWork.RollBack();
-                    throw new InvalidOperationException("Some problems with SQL Server", sqlExeption);
-                }
                 catch (Exception exeption)
                 {
                     _unitOfWork.RollBack();
-                    throw new Exception("Exeption: {0}", exeption);
+                    throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
                 }
             }
             return false;
@@ -269,20 +241,10 @@ namespace TheWitcher.Business
                 _unitOfWork.RollBack();
                 throw new NullReferenceException("Hero in hero service probably null", nullRefExep);
             }
-            catch (InvalidOperationException invalOperExep)
-            {
-                _unitOfWork.RollBack();
-                throw new InvalidOperationException("Hero service 279", invalOperExep);
-            }
-            catch (SqlException sqlExeption)
-            {
-                _unitOfWork.RollBack();
-                throw new InvalidOperationException("Some problems with SQL Server", sqlExeption);
-            }
             catch (Exception exeption)
             {
                 _unitOfWork.RollBack();
-                throw new Exception("Exeption: {0}", exeption);
+                throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
             }
         }
 
@@ -311,20 +273,10 @@ namespace TheWitcher.Business
                 _unitOfWork.RollBack();
                  throw new NullReferenceException("Hero in hero service probably null", nullRefExep);
             }
-            catch (InvalidOperationException invalOperExep)
-            {
-                _unitOfWork.RollBack();
-                throw new InvalidOperationException("Hero service 279", invalOperExep);
-            }
-            catch(SqlException sqlExeption)
-            {
-                _unitOfWork.RollBack();
-                throw new InvalidOperationException("Some problems with SQL Server", sqlExeption);
-            }
             catch (Exception exeption)
             {
                 _unitOfWork.RollBack();
-                throw new Exception("Exeption: {0}", exeption);
+                throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
             }
         }
     }

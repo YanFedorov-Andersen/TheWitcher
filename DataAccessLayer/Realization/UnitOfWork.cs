@@ -123,15 +123,8 @@ namespace DataAccessLayer.Realization
 
         public bool EndTransaction()
         {
-            try
-            {
-                _dataBase.SaveChanges();
-                _dataBase.Database.CurrentTransaction.Commit();
-
-            }
-            catch (DbEntityValidationException dbEx)
-            {
-            }
+            _dataBase.SaveChanges();
+            _dataBase.Database.CurrentTransaction.Commit();
             return true;
         }
 
