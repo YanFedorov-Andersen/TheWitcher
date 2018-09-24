@@ -70,7 +70,7 @@ namespace TheWitcher.Business
             catch (Exception exeption)
             {
                 _unitOfWork.RollBack();
-                throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
+                throw new Exception(String.Format("Exeption: {0}", exeption.Message), exeption);
             }
         }
         public void CheckHeroQuests(int heroId)
@@ -126,7 +126,7 @@ namespace TheWitcher.Business
                     catch (Exception exeption)
                     {
                         _unitOfWork.RollBack();
-                        throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
+                        throw new Exception(String.Format("Exeption: {0}", exeption.Message), exeption);
                     }
                 }
             }
@@ -170,7 +170,7 @@ namespace TheWitcher.Business
                 catch (Exception exeption)
                 {
                     _unitOfWork.RollBack();
-                    throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
+                    throw new Exception(String.Format("Exeption: {0}", exeption.Message), exeption);
                 }
             }
             return false;
@@ -212,7 +212,7 @@ namespace TheWitcher.Business
                 catch (Exception exeption)
                 {
                     _unitOfWork.RollBack();
-                    throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
+                    throw new Exception(String.Format("Exeption: {0}", exeption.Message), exeption);
                 }
             }
             return false;
@@ -244,7 +244,7 @@ namespace TheWitcher.Business
             catch (Exception exeption)
             {
                 _unitOfWork.RollBack();
-                throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
+                throw new Exception(String.Format("Exeption: {0}", exeption.Message), exeption);
             }
         }
 
@@ -276,7 +276,7 @@ namespace TheWitcher.Business
             catch (Exception exeption)
             {
                 _unitOfWork.RollBack();
-                throw new Exception(String.Format("Exeption: {0}", exeption.ToString()), exeption);
+                throw new Exception(String.Format("Exeption: {0}", exeption.Message), exeption);
             }
         }
     }
