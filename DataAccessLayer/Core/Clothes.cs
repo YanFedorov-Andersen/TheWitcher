@@ -27,6 +27,7 @@ namespace DataAccessLayer.Core
         public Nullable<int> ClothesWeight { get; set; }
         public string Characteristics { get; set; }
         public string Colour { get; set; }
+        public Nullable<int> CombatPower { get; set; }
     
         public virtual ClothesType ClothesType1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

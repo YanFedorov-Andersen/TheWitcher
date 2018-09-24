@@ -2,6 +2,7 @@
 using DataAccessLayer.Realization;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Core;
+using TheWitcher.Business;
 
 namespace TheWitcher
 {
@@ -11,22 +12,14 @@ namespace TheWitcher
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<TheWitcherEntities>().As<TheWitcherEntities>();
-            builder.RegisterType<ClothesRepository>().As<IRepository<Clothes>>();
-            builder.RegisterType<ClothesTypeRepository>().As<IRepository<ClothesType>>();
-            builder.RegisterType<WeaponRepository>().As<IRepository<Weapons>>();
-            builder.RegisterType<WeaponsTypeRepository>().As<IRepository<WeaponsType>>();
-            builder.RegisterType<QuestRepository>().As<IRepository<Quest>>();
-            builder.RegisterType<HeroRepository>().As<IRepository<Heroes>>();
+            builder.RegisterType<UnitOfWork>().As<UnitOfWork>();
 
             var container = builder.Build();
 
-            IRepository<Clothes> clothes = container.Resolve<IRepository<Clothes>>();
-            IRepository<ClothesType> clothesType = container.Resolve<IRepository<ClothesType>>();
-            IRepository<Weapons> weapons = container.Resolve<IRepository<Weapons>>();
-            IRepository<WeaponsType> weaponsType = container.Resolve<IRepository<WeaponsType>>();
-            IRepository<Quest> quest = container.Resolve<IRepository<Quest>>();
-            IRepository<Heroes> heroes = container.Resolve<IRepository<Heroes>>();
+            UnitOfWork unitOfWork = container.Resolve<UnitOfWork>();
+
+            HeroService heroService = new HeroService(unitOfWork);
+            heroService.TakeTheQuest(5, 4);
         }
     }
 }

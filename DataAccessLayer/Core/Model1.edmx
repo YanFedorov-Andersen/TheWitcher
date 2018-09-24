@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище TheWitcherModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище TheWitcherModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Clothes">
           <Key>
             <PropertyRef Name="Id" />
@@ -16,6 +16,7 @@
           <Property Name="ClothesWeight" Type="int" />
           <Property Name="Characteristics" Type="nvarchar" MaxLength="200" />
           <Property Name="Colour" Type="nvarchar" MaxLength="10" />
+          <Property Name="CombatPower" Type="int" />
         </EntityType>
         <EntityType Name="ClothesType">
           <Key>
@@ -76,6 +77,7 @@
           <Property Name="Award" Type="smallmoney" />
           <Property Name="LeadTime" Type="time" Precision="7" />
           <Property Name="AccessLevel" Type="int" />
+          <Property Name="Complexity" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -97,6 +99,7 @@
           <Property Name="WeaponAccessLevel" Type="int" />
           <Property Name="WeaponWeight" Type="decimal" Precision="18" Scale="0" />
           <Property Name="Characteristics" Type="nvarchar" MaxLength="200" />
+          <Property Name="CombatPower" Type="int" />
         </EntityType>
         <EntityType Name="WeaponsType">
           <Key>
@@ -246,8 +249,7 @@
             <End Role="Weapons" EntitySet="Weapons" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TheWitcherModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -264,6 +266,7 @@
           <Property Name="Colour" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ClothesType1" Relationship="Self.FK__Clothes__Clothes__693CA210" FromRole="Clothes" ToRole="ClothesType" />
           <NavigationProperty Name="HeroClothes" Relationship="Self.FK__HeroCloth__Cloth__52593CB8" FromRole="Clothes" ToRole="HeroClothes" />
+          <Property Name="CombatPower" Type="Int32" />
         </EntityType>
         <EntityType Name="ClothesType">
           <Key>
@@ -335,6 +338,7 @@
           <Property Name="LeadTime" Type="Time" Precision="7" />
           <Property Name="AccessLevel" Type="Int32" />
           <NavigationProperty Name="HeroInQuest" Relationship="Self.FK__HeroInQue__Quest__59063A47" FromRole="Quest" ToRole="HeroInQuest" />
+          <Property Name="Complexity" Type="Int32" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -358,6 +362,7 @@
           <Property Name="Characteristics" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="HeroWeapon" Relationship="Self.FK__HeroWeapo__Weapo__4BAC3F29" FromRole="Weapons" ToRole="HeroWeapon" />
           <NavigationProperty Name="WeaponsType" Relationship="Self.FK__Weapons__WeaponT__68487DD7" FromRole="Weapons" ToRole="WeaponsType" />
+          <Property Name="CombatPower" Type="Int32" />
         </EntityType>
         <EntityType Name="WeaponsType">
           <Key>
@@ -517,6 +522,7 @@
           <EntitySetMapping Name="Clothes">
             <EntityTypeMapping TypeName="TheWitcherModel.Clothes">
               <MappingFragment StoreEntitySet="Clothes">
+                <ScalarProperty Name="CombatPower" ColumnName="CombatPower" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ClothesType" ColumnName="ClothesType" />
                 <ScalarProperty Name="PriceOfBuy" ColumnName="PriceOfBuy" />
@@ -585,6 +591,7 @@
           <EntitySetMapping Name="Quest">
             <EntityTypeMapping TypeName="TheWitcherModel.Quest">
               <MappingFragment StoreEntitySet="Quest">
+                <ScalarProperty Name="Complexity" ColumnName="Complexity" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="QuestName" ColumnName="QuestName" />
                 <ScalarProperty Name="Award" ColumnName="Award" />
@@ -607,6 +614,7 @@
           <EntitySetMapping Name="Weapons">
             <EntityTypeMapping TypeName="TheWitcherModel.Weapons">
               <MappingFragment StoreEntitySet="Weapons">
+                <ScalarProperty Name="CombatPower" ColumnName="CombatPower" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="WeaponType" ColumnName="WeaponType" />
                 <ScalarProperty Name="PriceOfBuy" ColumnName="PriceOfBuy" />

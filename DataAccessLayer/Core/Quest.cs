@@ -25,6 +25,7 @@ namespace DataAccessLayer.Core
         public Nullable<decimal> Award { get; set; }
         public Nullable<System.TimeSpan> LeadTime { get; set; }
         public Nullable<int> AccessLevel { get; set; }
+        public Nullable<int> Complexity { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HeroInQuest> HeroInQuest { get; set; }

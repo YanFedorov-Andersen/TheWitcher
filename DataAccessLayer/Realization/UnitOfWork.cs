@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer.Core;
+using System;
+using System.Data.Entity.Validation;
 
 namespace DataAccessLayer.Realization
 {
@@ -11,13 +13,30 @@ namespace DataAccessLayer.Realization
         private WeaponRepository _weaponRepository;
         private WeaponsTypeRepository _weaponsTypeRepository;
         private QuestRepository _questRepository;
+        private HeroInQuestRepository _heroInQuestRepository;
+        private HeroClothesRepository _heroClothesRepository;
+        private HeroWeaponsRepository _heroWeaponsRepository;
+
         public ClothesRepository Clothes
-        {
+        {            
             get
             {
                 if (_clothesRepository == null)
+                {
                     _clothesRepository = new ClothesRepository(_dataBase);
+                }
                 return _clothesRepository;
+            }
+        }
+        public HeroInQuestRepository HeroInQuest
+        {
+            get
+            {
+                if (_heroInQuestRepository == null)
+                {
+                    _heroInQuestRepository = new HeroInQuestRepository(_dataBase);
+                }
+                return _heroInQuestRepository;
             }
         }
         public ClothesTypeRepository ClothesType
@@ -25,7 +44,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_clothesTypeRepository == null)
+                {
                     _clothesTypeRepository = new ClothesTypeRepository(_dataBase);
+                }
                 return _clothesTypeRepository;
             }
         }
@@ -34,7 +55,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_weaponRepository == null)
+                {
                     _weaponRepository = new WeaponRepository(_dataBase);
+                }
                 return _weaponRepository;
             }
         }
@@ -43,7 +66,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_weaponsTypeRepository == null)
+                {
                     _weaponsTypeRepository = new WeaponsTypeRepository(_dataBase);
+                }
                 return _weaponsTypeRepository;
             }
         }
@@ -52,7 +77,9 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_questRepository == null)
+                {
                     _questRepository = new QuestRepository(_dataBase);
+                }
                 return _questRepository;
             }
         }
@@ -61,9 +88,49 @@ namespace DataAccessLayer.Realization
             get
             {
                 if (_heroRepository == null)
+                {
                     _heroRepository = new HeroRepository(_dataBase);
+                }
                 return _heroRepository;
             }
+        }
+        public HeroWeaponsRepository HeroWeapon
+        {
+            get
+            {
+                if (_heroWeaponsRepository == null)
+                {
+                    _heroWeaponsRepository = new HeroWeaponsRepository(_dataBase);
+                }
+                return _heroWeaponsRepository;
+            }
+        }
+        public HeroClothesRepository HeroClothes
+        {
+            get
+            {
+                if (_heroClothesRepository == null)
+                {
+                    _heroClothesRepository = new HeroClothesRepository(_dataBase);
+                }
+                return _heroClothesRepository;
+            }
+        }
+        public void BeginTransaction()
+        {
+            _dataBase.Database.BeginTransaction();
+        }
+
+        public bool EndTransaction()
+        {
+            _dataBase.SaveChanges();
+            _dataBase.Database.CurrentTransaction.Commit();
+            return true;
+        }
+
+        public void RollBack()
+        {
+            _dataBase.Database.CurrentTransaction.Rollback();
         }
     }
 }
