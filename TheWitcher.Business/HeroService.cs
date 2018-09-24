@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Linq;
 using DataAccessLayer.Core;
 using DataAccessLayer.Interfaces;
@@ -60,9 +61,14 @@ namespace TheWitcher.Business
                 hero.ReleaseDate.Value.AddSeconds(newQuestTimeInSeconds);
                 return true;
             }
-            catch(Exception e)
+            catch(DivideByZeroException e)
             {
-                return false;
+                throw new DivideByZeroException("Division by zero detected!", e);
+            }
+            catch (Exception e)
+            {
+                _unitOfWork.RollBack();
+                throw new Exception("Some problems", e);
             }
         }
         public void CheckHeroQuests(int heroId)
@@ -108,35 +114,33 @@ namespace TheWitcher.Business
                         _heroRepository.Update(hero);
                         _questRepository.Update(quest);
                         _unitOfWork.EndTransaction();
+                        return true;
                     }
-                    catch(Exception e)
+                    catch (NullReferenceException e)
                     {
                         _unitOfWork.RollBack();
-                        return false;
+                        throw new NullReferenceException("Hero or quest in hero service probably null", e);
                     }
-                    return true;
+                    catch (InvalidOperationException e)
+                    {
+                        _unitOfWork.RollBack();
+                        throw new InvalidOperationException("Hero service 122", e);
+                    }
+                    catch (SqlException e)
+                    {
+                        _unitOfWork.RollBack();
+                        throw new InvalidOperationException("Some problems with SQL Server", e);
+                    }
+                    catch (Exception e)
+                    {
+                        _unitOfWork.RollBack();
+                        throw new Exception("Some problems", e);
+                    }
                 }
             }
             return false;
         }
        
-        private bool ChangeHeroMoney(int heroId, int money, char sign)
-        {
-            try
-            {
-                var hero = _heroRepository.GetItem(heroId);
-                if (sign == '+')
-                    hero.HeroMoney += Convert.ToDecimal(money);
-                else
-                    hero.HeroMoney -= Convert.ToDecimal(money);
-                _heroRepository.Update(hero);
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-            return true;
-        }
         public bool BuyClothes(int heroId, int clothesId)
         {
             if (heroId < 0 || clothesId < 0)
@@ -166,10 +170,25 @@ namespace TheWitcher.Business
                     _unitOfWork.EndTransaction();
                     return true;
                 }
-                catch(Exception e)
+                catch (NullReferenceException e)
                 {
                     _unitOfWork.RollBack();
-                    return false;
+                    throw new NullReferenceException("Hero in hero service probably null", e);
+                }
+                catch (InvalidOperationException e)
+                {
+                    _unitOfWork.RollBack();
+                    throw new InvalidOperationException("Hero service 193", e);
+                }
+                catch (SqlException e)
+                {
+                    _unitOfWork.RollBack();
+                    throw new InvalidOperationException("Some problems with SQL Server", e);
+                }
+                catch (Exception e)
+                {
+                    _unitOfWork.RollBack();
+                    throw new Exception("Some problems", e);
                 }
             }
             return false;
@@ -203,10 +222,25 @@ namespace TheWitcher.Business
                     _unitOfWork.EndTransaction();
                     return true;
                 }
+                catch (NullReferenceException e)
+                {
+                    _unitOfWork.RollBack();
+                    throw new NullReferenceException("Hero in hero service probably null", e);
+                }
+                catch (InvalidOperationException e)
+                {
+                    _unitOfWork.RollBack();
+                    throw new InvalidOperationException("Hero service 245", e);
+                }
+                catch (SqlException e)
+                {
+                    _unitOfWork.RollBack();
+                    throw new InvalidOperationException("Some problems with SQL Server", e);
+                }
                 catch (Exception e)
                 {
                     _unitOfWork.RollBack();
-                    return false;
+                    throw new Exception("Some problems", e);
                 }
             }
             return false;
@@ -230,10 +264,25 @@ namespace TheWitcher.Business
                 _unitOfWork.EndTransaction();
                 return true;
             }
+            catch (NullReferenceException e)
+            {
+                _unitOfWork.RollBack();
+                throw new NullReferenceException("Hero in hero service probably null", e);
+            }
+            catch (InvalidOperationException e)
+            {
+                _unitOfWork.RollBack();
+                throw new InvalidOperationException("Hero service 279", e);
+            }
+            catch (SqlException e)
+            {
+                _unitOfWork.RollBack();
+                throw new InvalidOperationException("Some problems with SQL Server", e);
+            }
             catch (Exception e)
             {
                 _unitOfWork.RollBack();
-                return false;
+                throw new Exception("Some problems", e);
             }
         }
 
@@ -257,10 +306,25 @@ namespace TheWitcher.Business
                 _unitOfWork.EndTransaction();
                 return true;
             }
+            catch (NullReferenceException e)
+            {
+                _unitOfWork.RollBack();
+                 throw new NullReferenceException("Hero in hero service probably null", e);
+            }
+            catch (InvalidOperationException e)
+            {
+                _unitOfWork.RollBack();
+                throw new InvalidOperationException("Hero service 279", e);
+            }
+            catch(SqlException e)
+            {
+                _unitOfWork.RollBack();
+                throw new InvalidOperationException("Some problems with SQL Server", e);
+            }
             catch (Exception e)
             {
                 _unitOfWork.RollBack();
-                return false;
+                throw new Exception("Some problems", e);
             }
         }
     }
