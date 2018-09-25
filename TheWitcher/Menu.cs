@@ -87,7 +87,8 @@ namespace TheWitcher
         {
             Console.WriteLine("Выберете квест, указав соответствующую цифру, сложность квеста напрямую влияют на время выполнения и награду за квест");
             var questSelected = Console.ReadLine();
-            int questId = Convert.ToInt32(questSelected);
+            int questId;
+            int.TryParse(questSelected, out questId);
             bool questIsTaken = _heroService.TakeTheQuest(heroId, questId);
             string questIsTakenConsoleOutput;
             questIsTakenConsoleOutput = questIsTaken?  "Квест успешно начат" : "Квест не доступен";
