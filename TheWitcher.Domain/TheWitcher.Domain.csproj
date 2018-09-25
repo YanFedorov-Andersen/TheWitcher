@@ -47,14 +47,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mappers\MapClothes.cs" />
     <Compile Include="Mappers\MapHeroes.cs" />
+    <Compile Include="Mappers\MapQuest.cs" />
+    <Compile Include="Mappers\MapWeapons.cs" />
+    <Compile Include="Models\ClothesDTO.cs" />
     <Compile Include="Models\HeroesDTO.cs" />
+    <Compile Include="Models\QuestDTO.cs" />
+    <Compile Include="Models\WeaponsDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+    <ProjectReference Include="..\DataAccessLayer\TheWitcher.DataAccess.csproj">
       <Project>{6bf1d4ce-9628-45aa-b782-5dea24c6dd5e}</Project>
-      <Name>DataAccessLayer</Name>
+      <Name>TheWitcher.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

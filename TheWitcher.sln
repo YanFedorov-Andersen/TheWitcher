@@ -7,13 +7,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheWitcher.Console", "TheWi
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TheWitcherDBProject", "TheWitcherDBProject\TheWitcherDBProject.sqlproj", "{88635A49-ED5E-4F38-A6C9-467D68B7A45A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccessLayer", "DataAccessLayer", "{5AC61F67-E821-4E0E-82CE-76666B43C383}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", "{5AC61F67-E821-4E0E-82CE-76666B43C383}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{6BF1D4CE-9628-45AA-B782-5DEA24C6DD5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheWitcher.DataAccess", "DataAccessLayer\TheWitcher.DataAccess.csproj", "{6BF1D4CE-9628-45AA-B782-5DEA24C6DD5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheWitcher.Business", "TheWitcher.Business\TheWitcher.Business.csproj", "{FE52F0C5-FB73-482E-A330-0826434BEBB9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheWitcher.Domain", "TheWitcher.Domain\TheWitcher.Domain.csproj", "{0A87E2F7-ADDE-47C3-97A7-6076C53E839F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{ECA76E61-CC33-45EE-817E-255F3C0BA883}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{6D334736-4C65-4397-B7B0-68C64F03010A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +54,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{88635A49-ED5E-4F38-A6C9-467D68B7A45A} = {5AC61F67-E821-4E0E-82CE-76666B43C383}
 		{6BF1D4CE-9628-45AA-B782-5DEA24C6DD5E} = {5AC61F67-E821-4E0E-82CE-76666B43C383}
+		{FE52F0C5-FB73-482E-A330-0826434BEBB9} = {ECA76E61-CC33-45EE-817E-255F3C0BA883}
+		{0A87E2F7-ADDE-47C3-97A7-6076C53E839F} = {6D334736-4C65-4397-B7B0-68C64F03010A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4BA26F9C-B62C-48C1-8021-0FF8DABCD8A1}

@@ -1,10 +1,10 @@
-﻿using DataAccessLayer.Interfaces;
-using DataAccessLayer.Core;
+﻿using TheWitcher.DataAccess.Interfaces;
+using TheWitcher.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
 
-namespace DataAccessLayer.Realization
+namespace TheWitcher.DataAccess.Realization
 {
     public class HeroRepository : IRepository<Heroes>
     {

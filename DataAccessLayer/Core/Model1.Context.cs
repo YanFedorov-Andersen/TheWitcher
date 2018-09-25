@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataAccessLayer.Core
+namespace TheWitcher.Core
 {
     using System;
     using System.Data.Entity;

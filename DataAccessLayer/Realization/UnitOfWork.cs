@@ -1,8 +1,8 @@
-﻿using DataAccessLayer.Core;
+﻿using TheWitcher.Core;
 using System;
 using System.Data.Entity.Validation;
 
-namespace DataAccessLayer.Realization
+namespace TheWitcher.DataAccess.Realization
 {
     public class UnitOfWork
     {
