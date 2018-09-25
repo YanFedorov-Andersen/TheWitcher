@@ -124,21 +124,21 @@ namespace TheWitcher
             Console.WriteLine("Для выбора магазина оружия - нажмите 0");
             Console.WriteLine("Для выбора магазина одежды - нажмите 1");
             Console.WriteLine("Для выхода в главное меню  - нажмите 2");
+            UserSelectedStore userSelectedStore;
             do
             {
                 string storeSelected = Console.ReadLine();
 
-                if (int.TryParse(storeSelected, out var num) && num >= 0 && num < 3)
+                if (Enum.TryParse(storeSelected, out userSelectedStore))
                 {
                     StoreSelectIsActive = false;
-                    return (UserSelectedStore)num;
                 }
                 else
                 {
                     Console.WriteLine("Выбранное вами поле не доступно, попробуйте ещё раз.");
                 }
             } while (StoreSelectIsActive);
-            return UserSelectedStore.Exit;
+            return userSelectedStore;
         }
         private void ChooseStore(UserSelectedStore userSelectStore)
         {
