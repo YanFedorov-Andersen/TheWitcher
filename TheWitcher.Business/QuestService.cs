@@ -19,10 +19,10 @@ namespace TheWitcher.Business
             _questRepository = unitOfWork.Quest;
             _mapQuest = mapQuest;
         }
-        public List<QuestDTO> GetNameIdLeadTimeQuests( HeroesDTO hero)
+        public List<QuestDTO> GetNameIdLeadTimeQuests(HeroesDTO hero)
         {
             var listQuestDTO = new List<QuestDTO>();
-            if(hero != null)
+            if (hero != null)
             {
                 List<Quest> quests = _questRepository.GetItemList().Where(x => x.AccessLevel >= hero.HeroLevel).ToList();
                 foreach(var quest in quests)

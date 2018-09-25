@@ -9,7 +9,10 @@ namespace TheWitcher
     {
         private readonly QuestService _questService;
         private readonly HeroService _heroService;
-        public bool GameIsActive = true;
+        private bool GameIsActive = true;
+        private bool StoreSelectIsActive = true;
+        private bool UserSelectingMainMenuOption = true;
+        private const int DEFAULT_HERO_ID = 6;
         public Menu(QuestService questService, HeroService heroService)
         {
             _questService = questService;
@@ -21,7 +24,7 @@ namespace TheWitcher
         }
         public void GameMenu()
         {
-            int heroId = 6;
+            int heroId = DEFAULT_HERO_ID;
             HeroesDTO heroDTO = _heroService.GetHeroDTO(heroId);
             do
             {
@@ -36,7 +39,8 @@ namespace TheWitcher
                     case UserSelection.Stores:
                         _heroService.CheckHeroQuests(heroId);
                         heroDTO = _heroService.GetHeroDTO(heroId);
-                        SelectStore();
+                        var userSelectedStore = UserSelectStore();
+                        ChooseStore(userSelectedStore);
                         break;
                     case UserSelection.Statisctic:
                         _heroService.CheckHeroQuests(heroId);
@@ -44,37 +48,10 @@ namespace TheWitcher
                         GetHeroStatistic(heroDTO);
                         break;
                     case UserSelection.Exit:
-                        return;
+                        GameIsActive = false;
+                        break;
                 }
             } while (GameIsActive);
-        }
-        private void SelectStore()
-        {
-            Console.WriteLine("Для выбора магазина оружия - нажмите 1");
-            Console.WriteLine("Для выбора магазина одежды - нажмите 2");
-            Console.WriteLine("Для выхода в главное меню  - нажмите 3");
-            string storeSelected = Console.ReadLine();
-            do
-            {
-                if (int.TryParse(storeSelected, out var num) && num > 0 && num < 4)
-                {
-                    if (num == 1)
-                    {
-                        DisplayWeaponsStore();
-                        return;
-                    }
-                    else if (num == 2)
-                    {
-                        DisplayClothesStore();
-                        return;
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-            }
-            while (true);
         }
         private void DisplayWeaponsStore()
         {
@@ -86,18 +63,25 @@ namespace TheWitcher
         }
         private void GetHeroStatistic(HeroesDTO heroDTO)
         {
-            Console.WriteLine("Имя :" + heroDTO.HeroName);
-            Console.WriteLine("Уровень :" + heroDTO.HeroLevel);
-            Console.WriteLine("Описание :" + heroDTO.HeroDescription);
-            Console.WriteLine("Деньги :" + heroDTO.HeroMoney);
+            Console.WriteLine(string.Concat("Имя :", heroDTO.HeroName));
+            Console.WriteLine(string.Concat("Уровень :", heroDTO.HeroLevel));
+            Console.WriteLine(string.Concat("Описание :", heroDTO.HeroDescription));
+            Console.WriteLine(string.Concat("Деньги :", heroDTO.HeroMoney));
         }
         private void DisplayAvailableQuests(HeroesDTO hero)
         {
             List<QuestDTO> questsDTO = _questService.GetNameIdLeadTimeQuests(hero);
-            foreach(var quest in questsDTO)
+            try
             {
-                Console.WriteLine("{0} - {1}, квест займёт {2}, сложность квеста - {3}", quest.Id, quest.QuestName, quest.LeadTime, quest.Complexity);
-            }            
+                foreach (var quest in questsDTO)
+                {
+                    Console.WriteLine("{0} - {1}, квест займёт {2}, сложность квеста - {3}", quest.Id, quest.QuestName, quest.LeadTime, quest.Complexity);
+                }
+            }
+            catch (FormatException exeption)
+            {
+                throw new FormatException("Неправильный формат строки, возможно какие то значения равны null", exeption);
+            }
         }
         private void ChooseQuest(int heroId)
         {
@@ -106,47 +90,69 @@ namespace TheWitcher
             int questId = Convert.ToInt32(questSelected);
             bool questIsTaken = _heroService.TakeTheQuest(heroId, questId);
             string questIsTakenConsoleOutput;
-            if (questIsTaken)
-            {
-                questIsTakenConsoleOutput = "Квест успешно начат";
-            }
-            else
-            {
-                questIsTakenConsoleOutput = "Квест не доступен";
-            }
+            questIsTakenConsoleOutput = questIsTaken?  "Квест успешно начат" : "Квест не доступен";
             Console.WriteLine(questIsTakenConsoleOutput);
         }
 
-        private static UserSelection SelectGame()
+        private UserSelection SelectGame()
         {
+            UserSelectingMainMenuOption = true;
             Console.WriteLine(@"Укажите нужное вам поле:
 0 - Перейти к доступным заданиям
 1 - Перейти в магазин
 2 - Отобразить статистику героя
 3 - Выйти из игры");
-
-            while (true)
+            UserSelection userSelection;
+            do
             {
                 var key = Console.ReadLine();
 
-                if (int.TryParse(key, out var num) && num >= 0 && num < 4)
+                if (Enum.TryParse(key, out userSelection))
                 {
-                    return (UserSelection)num;
+                    UserSelectingMainMenuOption = false;
                 }
                 else
                 {
                     Console.WriteLine("Выбранное вами поле не доступно, попробуйте ещё раз.");
                 }
+            } while (UserSelectingMainMenuOption);
+            return userSelection;
+        }
+        private UserSelectedStore UserSelectStore()
+        {
+            StoreSelectIsActive = true;
+            Console.WriteLine("Для выбора магазина оружия - нажмите 0");
+            Console.WriteLine("Для выбора магазина одежды - нажмите 1");
+            Console.WriteLine("Для выхода в главное меню  - нажмите 2");
+            do
+            {
+                string storeSelected = Console.ReadLine();
+
+                if (int.TryParse(storeSelected, out var num) && num >= 0 && num < 3)
+                {
+                    StoreSelectIsActive = false;
+                    return (UserSelectedStore)num;
+                }
+                else
+                {
+                    Console.WriteLine("Выбранное вами поле не доступно, попробуйте ещё раз.");
+                }
+            } while (StoreSelectIsActive);
+            return UserSelectedStore.Exit;
+        }
+        private void ChooseStore(UserSelectedStore userSelectStore)
+        {
+            switch (userSelectStore)
+            {
+                case UserSelectedStore.WeaponStore:
+                    DisplayWeaponsStore();
+                    break;
+                case UserSelectedStore.ClothesStore:
+                    DisplayClothesStore();
+                    break;
+                case UserSelectedStore.Exit:
+                    return;
             }
         }
-
-    }
-    
-    public enum UserSelection
-    {
-        Quests,
-        Stores,
-        Statisctic,
-        Exit
     }
 }
