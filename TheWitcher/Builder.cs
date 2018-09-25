@@ -1,8 +1,9 @@
 ﻿using Autofac;
-using DataAccessLayer.Realization;
-using DataAccessLayer.Interfaces;
-using DataAccessLayer.Core;
+using TheWitcher.DataAccess.Realization;
+using TheWitcher.DataAccess.Interfaces;
+using TheWitcher.Core;
 using TheWitcher.Business;
+using TheWitcher.Domain.Mappers;
 
 namespace TheWitcher
 {
@@ -14,12 +15,29 @@ namespace TheWitcher
 
             builder.RegisterType<UnitOfWork>().As<UnitOfWork>();
 
+            builder.RegisterType<MapHeroes>().As<MapHeroes>();
+            builder.RegisterType<MapQuest>().As<MapQuest>();
+
+            builder.RegisterType<HeroService>().As<HeroService>();
+            builder.RegisterType<QuestService>().As<QuestService>();
+
+            builder.RegisterType<Menu>().As<Menu>();
+
             var container = builder.Build();
 
             UnitOfWork unitOfWork = container.Resolve<UnitOfWork>();
 
-            HeroService heroService = new HeroService(unitOfWork);
-            heroService.TakeTheQuest(5, 4);
+            MapHeroes mapHeroes = container.Resolve<MapHeroes>();
+            MapQuest mapQuest = container.Resolve<MapQuest>();
+
+            HeroService heroService = container.Resolve<HeroService>();
+            QuestService questService = container.Resolve<QuestService>();
+
+            Menu menu = container.Resolve<Menu>();
+
+
+            menu.Greeting();
+            menu.GameMenu();
         }
     }
 }

@@ -55,6 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder.cs" />
+    <Compile Include="Enums\UserSelectedStoreEnum.cs" />
+    <Compile Include="Enums\UserSelectionEnum.cs" />
+    <Compile Include="Menu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeedData.cs" />
@@ -69,13 +72,17 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+    <ProjectReference Include="..\DataAccessLayer\TheWitcher.DataAccess.csproj">
       <Project>{6bf1d4ce-9628-45aa-b782-5dea24c6dd5e}</Project>
-      <Name>DataAccessLayer</Name>
+      <Name>TheWitcher.DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\TheWitcher.Business\TheWitcher.Business.csproj">
       <Project>{fe52f0c5-fb73-482e-a330-0826434bebb9}</Project>
       <Name>TheWitcher.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TheWitcher.Domain\TheWitcher.Domain.csproj">
+      <Project>{0a87e2f7-adde-47c3-97a7-6076c53e839f}</Project>
+      <Name>TheWitcher.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

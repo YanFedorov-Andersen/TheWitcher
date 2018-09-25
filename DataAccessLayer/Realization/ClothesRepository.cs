@@ -1,10 +1,10 @@
-﻿using DataAccessLayer.Core;
-using DataAccessLayer.Interfaces;
+﻿using TheWitcher.Core;
+using TheWitcher.DataAccess.Interfaces;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
-namespace DataAccessLayer.Realization
+namespace TheWitcher.DataAccess.Realization
 {
     public class ClothesRepository : IRepository<Clothes>
     {

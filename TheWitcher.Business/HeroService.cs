@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Linq;
-using DataAccessLayer.Core;
-using DataAccessLayer.Interfaces;
-using DataAccessLayer.Realization;
-
+using TheWitcher.Core;
+using TheWitcher.DataAccess.Interfaces;
+using TheWitcher.DataAccess.Realization;
+using TheWitcher.Domain.Mappers;
+using TheWitcher.Domain.Models;
 
 namespace TheWitcher.Business
 {
@@ -18,9 +18,10 @@ namespace TheWitcher.Business
         private readonly IRepository<Weapons> _weaponsRepository;
         private readonly IRepository<HeroWeapon> _heroWeaponRepository;
         private readonly UnitOfWork _unitOfWork;
+        private readonly MapHeroes _mapHeroes;
         private const int COEFFICIENT_PRICE_SELLING_OBJECTS = 3;
         private const bool ITEM_INITIAL_STATE = false;
-        public HeroService(UnitOfWork unitOfWork)
+        public HeroService(UnitOfWork unitOfWork, MapHeroes mapHeroes)
         {
             _heroRepository = unitOfWork.Hero;
             _questRepository = unitOfWork.Quest;
@@ -30,6 +31,17 @@ namespace TheWitcher.Business
             _weaponsRepository = unitOfWork.Weapon;
             _heroWeaponRepository = unitOfWork.HeroWeapon;
             _unitOfWork = unitOfWork;
+            _mapHeroes = mapHeroes;
+        }
+        public HeroesDTO GetHeroDTO(int heroId)
+        {
+            if (heroId >= 0)
+            {
+                Heroes hero = _heroRepository.GetItem(heroId);
+                HeroesDTO heroDTO = _mapHeroes.AutoMapHeroes(hero);
+                return heroDTO;
+            }
+            return null;
         }
         private int CountPowerOfHero(int id)
         {

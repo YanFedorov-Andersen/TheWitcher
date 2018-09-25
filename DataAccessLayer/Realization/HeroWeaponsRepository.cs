@@ -1,5 +1,5 @@
-﻿using DataAccessLayer.Core;
-using DataAccessLayer.Interfaces;
+﻿using TheWitcher.Core;
+using TheWitcher.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Realization
+namespace TheWitcher.DataAccess.Realization
 {
     public class HeroWeaponsRepository : IRepository<HeroWeapon>
     {
