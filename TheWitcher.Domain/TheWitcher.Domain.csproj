@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mappers\IMapHeroes.cs" />
+    <Compile Include="Mappers\IMapQuest.cs" />
     <Compile Include="Mappers\MapClothes.cs" />
     <Compile Include="Mappers\MapHeroes.cs" />
     <Compile Include="Mappers\MapQuest.cs" />

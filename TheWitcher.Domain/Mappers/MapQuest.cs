@@ -3,7 +3,7 @@ using TheWitcher.Domain.Models;
 
 namespace TheWitcher.Domain.Mappers
 {
-    public class MapQuest
+    public class MapQuest: IMapQuest
     {
         public QuestDTO AutoMapQuests(Quest quest)
         {

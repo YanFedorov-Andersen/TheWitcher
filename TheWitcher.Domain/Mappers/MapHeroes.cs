@@ -3,7 +3,7 @@ using TheWitcher.Domain.Models;
 
 namespace TheWitcher.Domain.Mappers
 {
-    public class MapHeroes
+    public class MapHeroes : IMapHeroes
     {
         public HeroesDTO AutoMapHeroes(Heroes hero)
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DataAccessLayer.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 using TheWitcher.Core;
 using TheWitcher.DataAccess.Interfaces;
@@ -11,9 +12,9 @@ namespace TheWitcher.Business
     public class QuestService
     {
         private readonly IRepository<Quest> _questRepository;
-        private readonly UnitOfWork _unitOfWork;
-        private readonly MapQuest _mapQuest;
-        public QuestService(UnitOfWork unitOfWork, MapQuest mapQuest)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapQuest _mapQuest;
+        public QuestService(IUnitOfWork unitOfWork, IMapQuest mapQuest)
         {
             _unitOfWork = unitOfWork;
             _questRepository = unitOfWork.Quest;

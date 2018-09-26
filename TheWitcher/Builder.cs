@@ -4,6 +4,7 @@ using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.Core;
 using TheWitcher.Business;
 using TheWitcher.Domain.Mappers;
+using DataAccessLayer.Interfaces;
 
 namespace TheWitcher
 {
@@ -13,10 +14,10 @@ namespace TheWitcher
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<UnitOfWork>().As<UnitOfWork>();
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
 
-            builder.RegisterType<MapHeroes>().As<MapHeroes>();
-            builder.RegisterType<MapQuest>().As<MapQuest>();
+            builder.RegisterType<MapHeroes>().As<IMapHeroes>();
+            builder.RegisterType<MapQuest>().As<IMapQuest>();
 
             builder.RegisterType<HeroService>().As<HeroService>();
             builder.RegisterType<QuestService>().As<QuestService>();
@@ -25,10 +26,10 @@ namespace TheWitcher
 
             var container = builder.Build();
 
-            UnitOfWork unitOfWork = container.Resolve<UnitOfWork>();
+            IUnitOfWork unitOfWork = container.Resolve<IUnitOfWork>();
 
-            MapHeroes mapHeroes = container.Resolve<MapHeroes>();
-            MapQuest mapQuest = container.Resolve<MapQuest>();
+            IMapHeroes mapHeroes = container.Resolve<IMapHeroes>();
+            IMapQuest mapQuest = container.Resolve<IMapQuest>();
 
             HeroService heroService = container.Resolve<HeroService>();
             QuestService questService = container.Resolve<QuestService>();
