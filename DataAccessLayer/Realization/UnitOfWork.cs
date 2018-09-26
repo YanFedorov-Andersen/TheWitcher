@@ -1,13 +1,13 @@
 ﻿using TheWitcher.Core;
-using System;
-using System.Data.Entity.Validation;
+using DataAccessLayer.Interfaces;
+using TheWitcher.DataAccess.Interfaces;
 
 namespace TheWitcher.DataAccess.Realization
 {
-    public class UnitOfWork
+    public class UnitOfWork: IUnitOfWork
     {
         private TheWitcherEntities _dataBase = new TheWitcherEntities();
-        private ClothesRepository _clothesRepository;
+        private IRepository<Clothes> _clothesRepository;
         private ClothesTypeRepository _clothesTypeRepository;
         private HeroRepository _heroRepository;
         private WeaponRepository _weaponRepository;
@@ -17,7 +17,7 @@ namespace TheWitcher.DataAccess.Realization
         private HeroClothesRepository _heroClothesRepository;
         private HeroWeaponsRepository _heroWeaponsRepository;
 
-        public ClothesRepository Clothes
+        public IRepository<Clothes> Clothes
         {            
             get
             {
@@ -28,7 +28,7 @@ namespace TheWitcher.DataAccess.Realization
                 return _clothesRepository;
             }
         }
-        public HeroInQuestRepository HeroInQuest
+        public IRepository<HeroInQuest> HeroInQuest
         {
             get
             {
@@ -39,7 +39,7 @@ namespace TheWitcher.DataAccess.Realization
                 return _heroInQuestRepository;
             }
         }
-        public ClothesTypeRepository ClothesType
+        public IRepository<ClothesType> ClothesType
         {
             get
             {
@@ -50,7 +50,7 @@ namespace TheWitcher.DataAccess.Realization
                 return _clothesTypeRepository;
             }
         }
-        public WeaponRepository Weapon
+        public IRepository<Weapons> Weapon
         {
             get
             {
@@ -61,7 +61,7 @@ namespace TheWitcher.DataAccess.Realization
                 return _weaponRepository;
             }
         }
-        public WeaponsTypeRepository WeaponType
+        public IRepository<WeaponsType> WeaponType
         {
             get
             {
@@ -72,7 +72,7 @@ namespace TheWitcher.DataAccess.Realization
                 return _weaponsTypeRepository;
             }
         }
-        public QuestRepository Quest
+        public IRepository<Quest> Quest
         {
             get
             {
@@ -83,7 +83,7 @@ namespace TheWitcher.DataAccess.Realization
                 return _questRepository;
             }
         }
-        public HeroRepository Hero
+        public IRepository<Heroes> Hero
         {
             get
             {
@@ -94,7 +94,7 @@ namespace TheWitcher.DataAccess.Realization
                 return _heroRepository;
             }
         }
-        public HeroWeaponsRepository HeroWeapon
+        public IRepository<HeroWeapon> HeroWeapon
         {
             get
             {
@@ -105,7 +105,7 @@ namespace TheWitcher.DataAccess.Realization
                 return _heroWeaponsRepository;
             }
         }
-        public HeroClothesRepository HeroClothes
+        public IRepository<HeroClothes> HeroClothes
         {
             get
             {

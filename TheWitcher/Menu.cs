@@ -7,13 +7,13 @@ namespace TheWitcher
 {
     public class Menu
     {
-        private readonly QuestService _questService;
-        private readonly HeroService _heroService;
+        private readonly IQuestService _questService;
+        private readonly IHeroService _heroService;
         private bool GameIsActive = true;
         private bool StoreSelectIsActive = true;
         private bool UserSelectingMainMenuOption = true;
         private const int DEFAULT_HERO_ID = 6;
-        public Menu(QuestService questService, HeroService heroService)
+        public Menu(IQuestService questService, IHeroService heroService)
         {
             _questService = questService;
             _heroService = heroService;

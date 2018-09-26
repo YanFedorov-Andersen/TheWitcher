@@ -4,6 +4,8 @@ using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.Core;
 using TheWitcher.Business;
 using TheWitcher.Domain.Mappers;
+using DataAccessLayer.Interfaces;
+using TheWitcher.Domain.Models;
 
 namespace TheWitcher
 {
@@ -13,25 +15,25 @@ namespace TheWitcher
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<UnitOfWork>().As<UnitOfWork>();
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
 
-            builder.RegisterType<MapHeroes>().As<MapHeroes>();
-            builder.RegisterType<MapQuest>().As<MapQuest>();
+            builder.RegisterType<MapHeroes>().As<IMapper<Heroes, HeroesDTO>>();
+            builder.RegisterType<MapQuest>().As<IMapper<Quest, QuestDTO>>();
 
-            builder.RegisterType<HeroService>().As<HeroService>();
-            builder.RegisterType<QuestService>().As<QuestService>();
+            builder.RegisterType<HeroService>().As<IHeroService>();
+            builder.RegisterType<QuestService>().As<IQuestService>();
 
             builder.RegisterType<Menu>().As<Menu>();
 
             var container = builder.Build();
 
-            UnitOfWork unitOfWork = container.Resolve<UnitOfWork>();
+            IUnitOfWork unitOfWork = container.Resolve<IUnitOfWork>();
 
-            MapHeroes mapHeroes = container.Resolve<MapHeroes>();
-            MapQuest mapQuest = container.Resolve<MapQuest>();
+            IMapper<Heroes, HeroesDTO> mapHeroes = container.Resolve<IMapper<Heroes, HeroesDTO>>();
+            IMapper<Quest, QuestDTO> mapQuest = container.Resolve<IMapper<Quest, QuestDTO>>();
 
-            HeroService heroService = container.Resolve<HeroService>();
-            QuestService questService = container.Resolve<QuestService>();
+            IHeroService heroService = container.Resolve<IHeroService>();
+            IQuestService questService = container.Resolve<IQuestService>();
 
             Menu menu = container.Resolve<Menu>();
 

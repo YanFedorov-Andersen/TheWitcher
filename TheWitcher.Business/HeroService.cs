@@ -1,14 +1,14 @@
-﻿using System;
+﻿using DataAccessLayer.Interfaces;
+using System;
 using System.Linq;
 using TheWitcher.Core;
 using TheWitcher.DataAccess.Interfaces;
-using TheWitcher.DataAccess.Realization;
 using TheWitcher.Domain.Mappers;
 using TheWitcher.Domain.Models;
 
 namespace TheWitcher.Business
 {
-    public class HeroService
+    public class HeroService: IHeroService
     {
         private readonly IRepository<Heroes> _heroRepository;
         private readonly IRepository<Quest> _questRepository;
@@ -17,11 +17,11 @@ namespace TheWitcher.Business
         private readonly IRepository<HeroClothes> _heroClothesRepository;
         private readonly IRepository<Weapons> _weaponsRepository;
         private readonly IRepository<HeroWeapon> _heroWeaponRepository;
-        private readonly UnitOfWork _unitOfWork;
-        private readonly MapHeroes _mapHeroes;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper<Heroes, HeroesDTO> _mapHeroes;
         private const int COEFFICIENT_PRICE_SELLING_OBJECTS = 3;
         private const bool ITEM_INITIAL_STATE = false;
-        public HeroService(UnitOfWork unitOfWork, MapHeroes mapHeroes)
+        public HeroService(IUnitOfWork unitOfWork, IMapper<Heroes, HeroesDTO> mapHeroes)
         {
             _heroRepository = unitOfWork.Hero;
             _questRepository = unitOfWork.Quest;
@@ -38,7 +38,7 @@ namespace TheWitcher.Business
             if (heroId >= 0)
             {
                 Heroes hero = _heroRepository.GetItem(heroId);
-                HeroesDTO heroDTO = _mapHeroes.AutoMapHeroes(hero);
+                HeroesDTO heroDTO = _mapHeroes.AutoMap(hero);
                 return heroDTO;
             }
             return null;

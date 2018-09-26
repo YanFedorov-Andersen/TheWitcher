@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HeroService.cs" />
+    <Compile Include="IHeroService.cs" />
+    <Compile Include="IQuestService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestService.cs" />
   </ItemGroup>
