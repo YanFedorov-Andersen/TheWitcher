@@ -18,10 +18,10 @@ namespace TheWitcher.Business
         private readonly IRepository<Weapons> _weaponsRepository;
         private readonly IRepository<HeroWeapon> _heroWeaponRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapHeroes _mapHeroes;
+        private readonly IMapper<Heroes, HeroesDTO> _mapHeroes;
         private const int COEFFICIENT_PRICE_SELLING_OBJECTS = 3;
         private const bool ITEM_INITIAL_STATE = false;
-        public HeroService(IUnitOfWork unitOfWork, IMapHeroes mapHeroes)
+        public HeroService(IUnitOfWork unitOfWork, IMapper<Heroes, HeroesDTO> mapHeroes)
         {
             _heroRepository = unitOfWork.Hero;
             _questRepository = unitOfWork.Quest;
@@ -38,7 +38,7 @@ namespace TheWitcher.Business
             if (heroId >= 0)
             {
                 Heroes hero = _heroRepository.GetItem(heroId);
-                HeroesDTO heroDTO = _mapHeroes.AutoMapHeroes(hero);
+                HeroesDTO heroDTO = _mapHeroes.AutoMap(hero);
                 return heroDTO;
             }
             return null;
@@ -151,7 +151,7 @@ namespace TheWitcher.Business
             {
                 return false;
             }
-            var hero = new Heroes();//_heroRepository.GetItem(heroId);
+            var hero = _heroRepository.GetItem(heroId);
             var cloth = _clothesRepository.GetItem(clothesId);
             if(hero.HeroMoney> cloth.PriceOfBuy && hero.AvailableWeight > cloth.ClothesWeight.Value)
             {

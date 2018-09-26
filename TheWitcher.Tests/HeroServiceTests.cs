@@ -17,27 +17,26 @@ namespace TheWitcher.Tests
         [Fact]
         public void GetHeroDTOTestByNegativeId()
         {
+            //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
-            var mockIClothesRepository = new Mock<IRepository<Clothes>>();
-            mockIClothesRepository.Setup(x => x.GetItem(4)).Returns(new Clothes());
-            mockUnitOfWork.Setup(x => x.Clothes).Returns(mockIClothesRepository.Object);
-            var mockMapHeroes = new Mock<IMapHeroes>();
+            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
             var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
-            heroService.BuyClothes(4, 4);
 
+            //act
             var resultOfTest = heroService.GetHeroDTO(-1);
 
+            //assert
             Assert.Null(resultOfTest);
-
         }
 
         [Fact]
         public void GetHeroDTOTestByPositiveId()
         {
+            //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
-            var mockMapHeroes = new Mock<IMapHeroes>();
+            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
             var mockIHeroRepository = new Mock<IRepository<Heroes>>();
-                        
+
             Heroes hero = new Heroes()
             {
                 HeroMoney = 50,
@@ -47,25 +46,33 @@ namespace TheWitcher.Tests
                 HeroLevel = 1,
                 Playable = true
             };
+            HeroesDTO heroDTO = new HeroesDTO()
+            {
+                Id = 4,
+                HeroLevel = 1,
+                HeroName = "Geralt",
+                HeroDescription = "Ведьмак школы волка",
+                HeroMoney = 50
+            };
             mockIHeroRepository.Setup(x => x.GetItem(4)).Returns(hero);
             mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
-            mockMapHeroes.Setup(x => x.AutoMapHeroes(hero)).Returns(new HeroesDTO());
+            mockMapHeroes.Setup(x => x.AutoMap(hero)).Returns(heroDTO);
             var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
 
-
+            //act
             var resultOfTest = heroService.GetHeroDTO(4);
 
-
-            HeroesDTO heroesDTO = new HeroesDTO();
-            Assert.IsType(heroesDTO.GetType(), resultOfTest);
-
+            //assert
+            Assert.IsType<HeroesDTO>(resultOfTest);
+            Assert.Equal(heroDTO, resultOfTest);
         }
 
         [Fact]
         public void TakeTheQuestTest()
         {
+            //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
-            var mockMapHeroes = new Mock<IMapHeroes>();
+            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
             var mockIHeroRepository = new Mock<IRepository<Heroes>>();
             var mockIQuestRepository = new Mock<IRepository<Quest>>();
             var mockIHeroInQuestRepository = new Mock<IRepository<HeroInQuest>>();
@@ -88,7 +95,7 @@ namespace TheWitcher.Tests
                 HeroId = 0,
                 PriceOfSell = 1,
 
-            
+
             };
             Heroes hero = new Heroes()
             {
@@ -101,7 +108,6 @@ namespace TheWitcher.Tests
                 HeroClothes = new List<HeroClothes> { heroClothes1 },
                 ReleaseDate = new DateTime(2011, 6, 10, 15, 24, 16)
             };
-
             Quest quest = new Quest()
             {
                 Id = 0,
@@ -117,19 +123,18 @@ namespace TheWitcher.Tests
             mockIHeroRepository.Setup(x => x.GetItem(4)).Returns(hero);
             var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
 
-
-            
+            //act
             var resultOfTest = heroService.TakeTheQuest(4, 4);
 
-
-
+            //assert
             Assert.True((bool)resultOfTest);
         }
         [Fact]
         public void ProcessCoefficientTest()
         {
+            //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
-            var mockMapHeroes = new Mock<IMapHeroes>();
+            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
             Heroes hero = new Heroes()
             {
                 HeroMoney = 50,
@@ -153,20 +158,63 @@ namespace TheWitcher.Tests
             methodData[1] = quest;
             methodData[2] = 60;
 
-
-
-            Type testingClassType = heroService.GetType();
+            //act
+            Type testingClassType = typeof(HeroService);
             var resultOfTest = testingClassType.InvokeMember("ProcessCoefficient", BindingFlags.InvokeMethod | BindingFlags.NonPublic |
-    BindingFlags.Public | BindingFlags.Instance, null, heroService, methodData);
+            BindingFlags.Public | BindingFlags.Instance, null, heroService, methodData);
 
-
+            //assert
             Assert.True((bool)resultOfTest);
         }
-        //[Theory]
-        //public void BuyWeaponsTestByNullAndNegativeParameters()
-        //{
+        [Theory]
+        [InlineData(-1, -1, false)]
+        [InlineData(-1, 1, false)]
+        [InlineData(1, -1, false)]
+        [InlineData(4, 4, true)]
+        public void BuyWeaponsTestByNullAndNegativeParameters(int heroId, int clothesId, bool resultOfTestExpected)
+        {
+            //arrange
+            var mockUnitOfWork = new Mock<IUnitOfWork>();
+            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
+            var mockIHeroRepository = new Mock<IRepository<Heroes>>();
+            var mockIClothesRepository = new Mock<IRepository<Clothes>>();
+            var mockIHeroClothesRepository = new Mock<IRepository<HeroClothes>>();
 
-        //}
+            Heroes hero = new Heroes()
+            {
+                HeroMoney = 50,
+                AvailableWeight = 30,
+                HeroName = "Geralt",
+                HeroDescription = "Ведьмак школы волка",
+                HeroLevel = 1,
+                Playable = true,
+                ReleaseDate = new DateTime(2011, 6, 10, 15, 24, 16)
+            };
+            Clothes clothes = new Clothes()
+            {
+                Id = 0,
+                ClothesAccessLevel = 1,
+                ClothesWeight = 6,
+                Characteristics = "Тяжелая куртка",
+                Colour = "Чёрный",
+                CombatPower = 60,
+                PriceOfBuy = 12
+            };
 
+            mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
+            mockUnitOfWork.Setup(x => x.Clothes).Returns(mockIClothesRepository.Object);
+            mockUnitOfWork.Setup(x => x.HeroClothes).Returns(mockIHeroClothesRepository.Object);
+
+            mockIClothesRepository.Setup(x => x.GetItem(clothesId)).Returns(clothes);
+            mockIHeroRepository.Setup(x => x.GetItem(heroId)).Returns(hero);
+
+            var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
+
+            //act
+            var resultOfTest = heroService.BuyClothes(heroId, clothesId);
+
+            //assert
+            Assert.Equal(resultOfTestExpected, resultOfTest);
+        }
     }
 }

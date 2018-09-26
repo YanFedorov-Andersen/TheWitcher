@@ -3,9 +3,9 @@ using TheWitcher.Domain.Models;
 
 namespace TheWitcher.Domain.Mappers
 {
-    public class MapHeroes : IMapHeroes
+    public class MapHeroes : IMapper<Heroes, HeroesDTO>
     {
-        public HeroesDTO AutoMapHeroes(Heroes hero)
+        public HeroesDTO AutoMap(Heroes hero)
         {
             HeroesDTO heroDTO = new HeroesDTO()
             {

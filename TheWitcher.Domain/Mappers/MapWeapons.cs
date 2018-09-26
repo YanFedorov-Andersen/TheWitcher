@@ -3,9 +3,9 @@ using TheWitcher.Domain.Models;
 
 namespace TheWitcher.Domain.Mappers
 {
-    public class MapWeapons
+    public class MapWeapons: IMapper<Weapons, WeaponsDTO>
     {
-        public WeaponsDTO AutoMapQuests(Weapons weapons)
+        public WeaponsDTO AutoMap(Weapons weapons)
         {
             WeaponsDTO questDTO = new WeaponsDTO()
             {

@@ -3,9 +3,9 @@ using TheWitcher.Domain.Models;
 
 namespace TheWitcher.Domain.Mappers
 {
-    public class MapClothes
+    public class MapClothes: IMapper<Clothes, ClothesDTO>
     {
-        public ClothesDTO AutoMapQuests(Clothes clothes)
+        public ClothesDTO AutoMap(Clothes clothes)
         {
             ClothesDTO questDTO = new ClothesDTO()
             {
