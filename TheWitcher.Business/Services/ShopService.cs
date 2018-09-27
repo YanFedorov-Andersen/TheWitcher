@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 using TheWitcher.Business.Interfaces;
 using TheWitcher.Core;
 using TheWitcher.DataAccess.Interfaces;
@@ -32,45 +33,28 @@ namespace TheWitcher.Business.Services
         public List<ClothesDTO> GetClothesListForBuy()
         {
             IEnumerable<Clothes> clothesList = _clothesRepository.GetItemList();
-            List<ClothesDTO> clothesDTOList = new List<ClothesDTO>();
-            foreach (var cloth in clothesList)
-            {
-                clothesDTOList.Add(_clothesMapper.AutoMap(cloth));
-            }
+            List<ClothesDTO> clothesDTOList = clothesList.Select(_clothesMapper.AutoMap).ToList();
             return clothesDTOList;
         }
         public List<WeaponsDTO> GetWeaponsListForBuy()
         {
             IEnumerable<Weapons> weaponsList = _weaponRepository.GetItemList();
-            List<WeaponsDTO> weaponsDTOList = new List<WeaponsDTO>();
-            foreach (var weapon in weaponsList)
-            {
-                weaponsDTOList.Add(_weaponMapper.AutoMap(weapon));
-            }
+            List<WeaponsDTO> weaponsDTOList = weaponsList.Select(_weaponMapper.AutoMap).ToList();
             return weaponsDTOList;
         }
         public List<HeroClothesDTO> GetClothesListForSell(int heroId)
         {
             var hero = _heroRepository.GetItem(heroId);
             var heroClothes = hero.HeroClothes;
-            List<HeroClothesDTO> clothesList = new List<HeroClothesDTO>();
-            foreach (var heroCloth in heroClothes)
-            {
-                clothesList.Add(_heroClothesMapper.AutoMap(heroCloth));
-            }
-            return clothesList;           
+            List<HeroClothesDTO> clothesDTOList = heroClothes.Select(_heroClothesMapper.AutoMap).ToList();
+            return clothesDTOList;           
         }
         public List<HeroWeaponsDTO> GetWeaponsListForSell(int heroId)
         {
             var hero = _heroRepository.GetItem(heroId);
             var heroWeapons = hero.HeroWeapon;
-            List<HeroWeaponsDTO> weaponsList = new List<HeroWeaponsDTO>();
-            foreach (var heroWeapon in heroWeapons)
-            {
-                weaponsList.Add(_heroWeaponsMapper.AutoMap(heroWeapon));
-            }
+            List<HeroWeaponsDTO> weaponsList = heroWeapons.Select(_heroWeaponsMapper.AutoMap).ToList();
             return weaponsList;
         }
-        //закончил получения предметов героя для продажи
     }
 }
