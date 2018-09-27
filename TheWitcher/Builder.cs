@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using TheWitcher.DataAccess.Realization;
-using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.Core;
 using TheWitcher.Business;
 using TheWitcher.Domain.Mappers;
