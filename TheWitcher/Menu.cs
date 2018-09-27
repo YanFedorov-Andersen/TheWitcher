@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using TheWitcher.Business;
+using TheWitcher.Business.Interfaces;
 using TheWitcher.Domain.Models;
+using TheWitcher.Enums;
 
 namespace TheWitcher
 {
@@ -9,14 +11,18 @@ namespace TheWitcher
     {
         private readonly IQuestService _questService;
         private readonly IHeroService _heroService;
+        private readonly IShopService _shopService;
+
         private bool GameIsActive = true;
         private bool StoreSelectIsActive = true;
         private bool UserSelectingMainMenuOption = true;
+        private bool UserSelectingStoreType = true;
         private const int DEFAULT_HERO_ID = 6;
-        public Menu(IQuestService questService, IHeroService heroService)
+        public Menu(IQuestService questService, IHeroService heroService, IShopService shopService)
         {
             _questService = questService;
             _heroService = heroService;
+            _shopService = shopService;
         }
         public void Greeting()
         {
@@ -37,10 +43,7 @@ namespace TheWitcher
                         ChooseQuest(heroDTO.Id);
                         break;
                     case UserSelection.Stores:
-                        _heroService.CheckHeroQuests(heroId);
-                        heroDTO = _heroService.GetHeroDTO(heroId);
-                        var userSelectedStore = UserSelectStore();
-                        ChooseStore(userSelectedStore);
+                        Store(heroDTO, heroId);
                         break;
                     case UserSelection.Statisctic:
                         _heroService.CheckHeroQuests(heroId);
@@ -53,14 +56,7 @@ namespace TheWitcher
                 }
             } while (GameIsActive);
         }
-        private void DisplayWeaponsStore()
-        {
-            Console.WriteLine("Вы находитесь в магазине оружия, для выбора, укажите соответствующий номер");
-        }
-        private void DisplayClothesStore()
-        {
-            Console.WriteLine("Вы находитесь в магазине одежды, для выбора, укажите соответствующий номер");
-        }
+
         private void GetHeroStatistic(HeroesDTO heroDTO)
         {
             Console.WriteLine(string.Concat("Имя :", heroDTO.HeroName));
@@ -91,7 +87,7 @@ namespace TheWitcher
             int.TryParse(questSelected, out questId);
             bool questIsTaken = _heroService.TakeTheQuest(heroId, questId);
             string questIsTakenConsoleOutput;
-            questIsTakenConsoleOutput = questIsTaken?  "Квест успешно начат" : "Квест не доступен";
+            questIsTakenConsoleOutput = questIsTaken ? "Квест успешно начат" : "Квест не доступен";
             Console.WriteLine(questIsTakenConsoleOutput);
         }
 
@@ -124,7 +120,7 @@ namespace TheWitcher
             StoreSelectIsActive = true;
             Console.WriteLine("Для выбора магазина оружия - нажмите 0");
             Console.WriteLine("Для выбора магазина одежды - нажмите 1");
-            Console.WriteLine("Для выхода в главное меню  - нажмите 2");
+            Console.WriteLine("Для выхода в главное меню - нажмите 2");
             UserSelectedStore userSelectedStore;
             do
             {
@@ -141,15 +137,116 @@ namespace TheWitcher
             } while (StoreSelectIsActive);
             return userSelectedStore;
         }
+        private void Store(HeroesDTO heroDTO, int heroId)
+        {
+            _heroService.CheckHeroQuests(heroId);
+            heroDTO = _heroService.GetHeroDTO(heroId);
+
+            //нужно теперь распределение для магазина продаж и покупок
+            UserSelectedStore userSelectedStore;
+            userSelectedStore = UserSelectStore();
+            ChooseStore(userSelectedStore);
+
+        }
+    
+        private StoreActionType UserSelectActionType()
+        {
+            UserSelectingStoreType = true;
+            Console.WriteLine("Для выбора магазина, где можно продавать - нажмите 0, для покупок - 1");
+            StoreActionType userSelection;
+            do
+            {
+                var key = Console.ReadLine();
+
+                if (Enum.TryParse(key, out userSelection))
+                {
+                    UserSelectingStoreType = false;
+                }
+                else
+                {
+                    Console.WriteLine("Выбранное вами поле не доступно, попробуйте ещё раз.");
+                }
+            } while (UserSelectingStoreType);
+            return userSelection;
+        }
+        private void DisplayWeaponsStore(StoreActionType storeActionType)
+        {
+            Console.WriteLine("Вы находитесь в магазине оружия, для выбора, укажите соответствующий номер");
+            List<WeaponsDTO> weaponListForBuy;
+            List<HeroWeaponsDTO> weaponListForSell;
+            int numberOfThings = 0;
+            int userAnswer;
+            switch (storeActionType)
+            {
+                case StoreActionType.Buy:
+                    weaponListForBuy = _shopService.GetWeaponsListForBuy();
+                    foreach (var weapon in weaponListForBuy)
+                    {
+                        Console.WriteLine($"{weapon.Id} - {weapon.Characteristics}, стоимость - {weapon.PriceOfBuy}.");
+                    }
+                    userAnswer = GetUserAnswer();
+                    _heroService.BuyWeapons(DEFAULT_HERO_ID, userAnswer);
+                    break;
+                case StoreActionType.Sell:
+                    weaponListForSell = _shopService.GetWeaponsListForSell(DEFAULT_HERO_ID);
+                    foreach (var weapon in weaponListForSell)
+                    {
+                        Console.WriteLine($"{weapon.Id} - {weapon.Description}, стоимость - {weapon.PriceOfSell}, мощь - {weapon.CombatPower}.");
+                    }
+                    userAnswer = GetUserAnswer();
+                    _heroService.SellWeapon(DEFAULT_HERO_ID, userAnswer);
+                    break;
+            }
+        }
+        private void DisplayClothesStore(StoreActionType storeActionType)
+        {
+            Console.WriteLine("Вы находитесь в магазине одежды, для выбора, укажите соответствующий номер");
+            List<ClothesDTO> clothesListForBuy;
+            List<HeroClothesDTO> clothesListForSell;
+            int userAnswer;
+            switch (storeActionType)
+            {
+                case StoreActionType.Buy:
+                    clothesListForBuy = _shopService.GetClothesListForBuy();
+                    foreach (var cloth in clothesListForBuy)
+                    {
+                        Console.WriteLine($"{cloth.Id} - {cloth.Characteristics}, стоимость - {cloth.PriceOfBuy}.");
+                    }
+                    userAnswer = GetUserAnswer();
+                    _heroService.BuyClothes(DEFAULT_HERO_ID, userAnswer);
+                    break;
+                case StoreActionType.Sell:
+                    clothesListForSell = _shopService.GetClothesListForSell(DEFAULT_HERO_ID);
+                    foreach (var cloth in clothesListForSell)
+                    {
+                        Console.WriteLine($"{cloth.Id} - {cloth.Description}, стоимость - {cloth.PriceOfSell}, мощь - {cloth.CombatPower}.");
+                    }
+                    userAnswer = GetUserAnswer();
+                    _heroService.SellCloth(DEFAULT_HERO_ID, userAnswer);
+                    break;
+            }
+        }
+        private int GetUserAnswer()
+        {
+            int itemId;
+            bool tryParse = false;
+            do
+            {
+                var itemSelected = Console.ReadLine();
+                tryParse = int.TryParse(itemSelected, out itemId);
+            } while (!tryParse);
+            return itemId;
+        }
         private void ChooseStore(UserSelectedStore userSelectStore)
         {
-            switch (userSelectStore)
+        var storeActionType = UserSelectActionType();
+        switch (userSelectStore)
             {
                 case UserSelectedStore.WeaponStore:
-                    DisplayWeaponsStore();
+                    DisplayWeaponsStore(storeActionType);
                     break;
                 case UserSelectedStore.ClothesStore:
-                    DisplayClothesStore();
+                    DisplayClothesStore(storeActionType);
                     break;
                 case UserSelectedStore.Exit:
                     return;

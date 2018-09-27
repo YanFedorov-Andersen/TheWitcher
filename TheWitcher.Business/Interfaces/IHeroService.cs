@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TheWitcher.Domain.Models;
 
-namespace TheWitcher.Business
+namespace TheWitcher.Business.Interfaces
 {
     public interface IHeroService
     {

@@ -1,4 +1,4 @@
-﻿namespace TheWitcher
+﻿namespace TheWitcher.Enums
 {
     public enum UserSelection
     {

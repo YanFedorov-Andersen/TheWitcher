@@ -49,11 +49,15 @@
   <ItemGroup>
     <Compile Include="Mappers\IMapper.cs" />
     <Compile Include="Mappers\MapClothes.cs" />
+    <Compile Include="Mappers\MapHeroClothes.cs" />
     <Compile Include="Mappers\MapHeroes.cs" />
+    <Compile Include="Mappers\MapHeroWeapons.cs" />
     <Compile Include="Mappers\MapQuest.cs" />
     <Compile Include="Mappers\MapWeapons.cs" />
     <Compile Include="Models\ClothesDTO.cs" />
+    <Compile Include="Models\HeroClothesDTO.cs" />
     <Compile Include="Models\HeroesDTO.cs" />
+    <Compile Include="Models\HeroWeaponsDTO.cs" />
     <Compile Include="Models\QuestDTO.cs" />
     <Compile Include="Models\WeaponsDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

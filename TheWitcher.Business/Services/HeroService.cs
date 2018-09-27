@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Interfaces;
 using System;
 using System.Linq;
+using TheWitcher.Business.Interfaces;
 using TheWitcher.Core;
 using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.Domain.Mappers;
@@ -65,8 +66,8 @@ namespace TheWitcher.Business
             }
             try
             {
-                int coefficient = heroPower / quest.Complexity.Value;
-                quest.Award = hero.HeroLevel / coefficient * 150;
+                double coefficient = heroPower / quest.Complexity.Value;
+                quest.Award = Convert.ToDecimal((hero.HeroLevel / coefficient * 150).Value);
                 double questTimeInSeconds = quest.LeadTime.Value.Seconds + quest.LeadTime.Value.Minutes * 60;
                 int newQuestTimeInSeconds = Convert.ToInt32(questTimeInSeconds / (hero.HeroLevel.Value * coefficient));
                 TimeSpan addingTimeSpan = TimeSpan.FromSeconds(newQuestTimeInSeconds);
@@ -229,15 +230,16 @@ namespace TheWitcher.Business
             }
             return false;
         }
-        public bool SellWeapon(int heroId, int weaponsId)
+        public bool SellWeapon(int heroId, int heroWeaponsId)
         {
-            if (heroId < 0 || weaponsId < 0)
+            if (heroId < 0 || heroWeaponsId < 0)
             {
                 return false;
             }
             var hero = _heroRepository.GetItem(heroId);
-            var weapon = _weaponsRepository.GetItem(weaponsId);
-            var heroWeapon = hero.HeroWeapon.FirstOrDefault(x => x.WeaponId == weaponsId);
+            var weaponId = _heroWeaponRepository.GetItem(heroWeaponsId).WeaponId;
+            var weapon = _weaponsRepository.GetItem(weaponId.Value);
+            var heroWeapon = hero.HeroWeapon.FirstOrDefault(x => x.Id == heroWeaponsId);
             hero.HeroMoney += heroWeapon.PriceOfSell;
             hero.AvailableWeight += Convert.ToInt32(weapon.WeaponWeight.Value);
             _unitOfWork.BeginTransaction();
@@ -260,15 +262,16 @@ namespace TheWitcher.Business
             }
         }
 
-        public bool SellCloth(int heroId, int clothId)
+        public bool SellCloth(int heroId, int heroClothId)
         {
-            if (heroId < 0 || clothId < 0)
+            if (heroId < 0 || heroClothId < 0)
             {
                 return false;
             }
             var hero = _heroRepository.GetItem(heroId);
-            var cloth = _clothesRepository.GetItem(clothId);
-            var heroCloth = hero.HeroClothes.FirstOrDefault(x => x.ClothesId == clothId);
+            var clothId = _heroClothesRepository.GetItem(heroClothId).ClothesId;
+            var cloth = _clothesRepository.GetItem(clothId.Value);
+            var heroCloth = hero.HeroClothes.FirstOrDefault(x => x.Id == heroClothId);
             hero.HeroMoney += heroCloth.PriceOfSell;
             
             hero.AvailableWeight += Convert.ToInt32(cloth.ClothesWeight.Value);
