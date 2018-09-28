@@ -73,22 +73,15 @@ namespace TheWitcher.Business
         }
         private bool ProcessCoefficient(Heroes hero, Quest quest, int heroPower)
         {
-            if (hero == null || quest == null)
+            if (hero == null || quest == null || hero.ReleaseDate > DateTime.Now)
             {
                 return false;
             }
-            if (hero.ReleaseDate > DateTime.Now)
-            {
-                return false;
-            }
-            else if(hero.ReleaseDate < DateTime.Now)
+            else if(hero.ReleaseDate < DateTime.Now || hero.ReleaseDate == null)
             {
                 hero.ReleaseDate = DateTime.Now;
             }
-            else if (hero.ReleaseDate == null)
-            {
-                hero.ReleaseDate = DateTime.Now;
-            }
+
             try
             {
                 double coefficient = heroPower / quest.Complexity.Value;
@@ -105,22 +98,20 @@ namespace TheWitcher.Business
             }
             catch (Exception exeption)
             {
-                _unitOfWork.RollBack();
                 throw new Exception(String.Format("Exeption: {0}", exeption.Message), exeption);
             }
         }
         public bool CheckHeroQuests(int heroId)
         {
             var hero = _heroRepository.GetItem(heroId);
-            if (hero == null)
+
+            if (hero == null || hero.HeroInQuest == null)
             {
                 return false;
             }
+
             var activeHeroQuests = hero.HeroInQuest.ToList();
-            if(activeHeroQuests == null)
-            {
-                return false;
-            }
+
             foreach(var quest in activeHeroQuests)
             {
                 if(hero.ReleaseDate.Value < DateTime.Now)
@@ -129,6 +120,7 @@ namespace TheWitcher.Business
                     _heroInQuestRepository.Delete(quest.Id);
                 }
             }
+
             _heroRepository.Update(hero);
             return true;
         }
@@ -139,13 +131,17 @@ namespace TheWitcher.Business
             {
                 return false;
             }
+
             var hero = _heroRepository.GetItem(heroId);
             var quest = _questRepository.GetItem(questId);
+
             if (hero == null || quest == null)
             {
                 return false;
             }
+
             int heroPower = CountPowerOfHero(heroId);
+
             if (heroPower > quest.Complexity)
             {
                 if (hero.ReleaseDate != null || hero.ReleaseDate < DateTime.Now)
@@ -188,12 +184,15 @@ namespace TheWitcher.Business
             {
                 return false;
             }
+
             var hero = _heroRepository.GetItem(heroId);
             var cloth = _clothesRepository.GetItem(clothesId);
+
             if (hero == null || cloth == null)
             {
                 return false;
             }
+
             if (hero.HeroMoney> cloth.PriceOfBuy && hero.AvailableWeight > cloth.ClothesWeight.Value)
             {
                 hero.HeroMoney -= cloth.PriceOfBuy;
@@ -234,12 +233,15 @@ namespace TheWitcher.Business
             {
                 return false;
             }
+
             var hero = _heroRepository.GetItem(heroId);
             var weapon = _weaponsRepository.GetItem(weaponsId);
+
             if (hero == null || weapon == null)
             {
                 return false;
             }
+
             if (hero.HeroMoney > weapon.PriceOfBuy && hero.AvailableWeight > weapon.WeaponWeight.Value)
             {
                 hero.HeroMoney -= weapon.PriceOfBuy;
@@ -280,27 +282,35 @@ namespace TheWitcher.Business
             {
                 return false;
             }
+
             var hero = _heroRepository.GetItem(heroId);
-            var heroWeaponObj = _heroWeaponRepository.GetItem(heroWeaponsId);
-            if (heroWeaponObj == null)
-            {
-                return false;
-            }
-            var weaponId = heroWeaponObj.WeaponId;
-            var weapon = _weaponsRepository.GetItem(weaponId.Value);
-            if (hero == null || weapon == null)
-            {
-                return false;
-            }
-            HeroWeapon heroWeapon;
-            heroWeapon = hero.HeroWeapon.FirstOrDefault(x => x.Id == heroWeaponsId);
+            var heroWeapon = _heroWeaponRepository.GetItem(heroWeaponsId);
+
             if (heroWeapon == null)
             {
                 return false;
             }
+
+            var weaponId = heroWeapon.WeaponId;
+            var weapon = _weaponsRepository.GetItem(weaponId.Value);
+
+            if (hero == null || weapon == null)
+            {
+                return false;
+            }
+
             hero.HeroMoney += heroWeapon.PriceOfSell;
-            hero.AvailableWeight += Convert.ToInt32(weapon.WeaponWeight.Value);
+            try
+            {
+                hero.AvailableWeight += Convert.ToInt32(weapon.WeaponWeight.Value);
+            }
+            catch (OverflowException exeption)
+            {
+                throw new OverflowException("Can not convert decimal to int becouse of OverFlow", exeption);
+            }
+
             _unitOfWork.BeginTransaction();
+
             try
             {
                 var idOfDeletedItem = _heroWeaponRepository.Delete(heroWeapon.Id);
@@ -326,29 +336,27 @@ namespace TheWitcher.Business
             {
                 return false;
             }
+
             var hero = _heroRepository.GetItem(heroId);
-            var heroClothObj = _heroClothesRepository.GetItem(heroClothId);
-            if (heroClothObj == null)
+            var heroCloth = _heroClothesRepository.GetItem(heroClothId);
+
+            if (heroCloth == null)
             {
                 return false;
             }
-            var clothId = heroClothObj.ClothesId;
+
+            var clothId = heroCloth.ClothesId;
             var cloth = _clothesRepository.GetItem(clothId.Value);
+
             if (hero == null || cloth == null)
             {
                 return false;
             }
 
-            HeroClothes heroCloth = hero.HeroClothes.FirstOrDefault(x => x.Id == heroClothId);
-            if (heroCloth == null)
-            {
-                return false;
-            }
             hero.HeroMoney += heroCloth.PriceOfSell;
-
-
-            hero.AvailableWeight += Convert.ToInt32(cloth.ClothesWeight.Value);
+             hero.AvailableWeight += cloth.ClothesWeight.Value;
             _unitOfWork.BeginTransaction();
+
             try
             {
                 var idOfDeletedItem = _heroClothesRepository.Delete(heroCloth.Id);

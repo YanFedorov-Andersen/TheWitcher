@@ -16,14 +16,19 @@ namespace TheWitcher.Tests
 {
     public class QuestServiceTests
     {
+        Mock<IUnitOfWork> mockIUnitOfWork;
+        Mock<IMapper<Quest, QuestDTO>> mockMapQuest;
+        Mock<IRepository<Quest>> mockIQuestRepository;
+        public QuestServiceTests()
+        {
+            mockIUnitOfWork = new Mock<IUnitOfWork>();
+            mockMapQuest = new Mock<IMapper<Quest, QuestDTO>>();
+            mockIQuestRepository = new Mock<IRepository<Quest>>();
+        }
         [Fact]
         public void GetNameIdLeadTimeQuestsTestByNullQuest()
         {
             //arrange
-            var mockIUnitOfWork = new Mock<IUnitOfWork>();
-            var mockMapQuest = new Mock<IMapper<Quest, QuestDTO>>();
-            var mockIQuestRepository = new Mock<IRepository<Quest>>();
-
             mockIUnitOfWork.Setup(x => x.Quest).Returns(mockIQuestRepository.Object);
             mockIQuestRepository.Setup(x => x.GetItemList());
             var questService = new QuestService(mockIUnitOfWork.Object, mockMapQuest.Object);

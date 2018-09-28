@@ -16,22 +16,36 @@ namespace TheWitcher.Tests
 {
     public class ShopServiceTests
     {
+        Mock<IUnitOfWork> mockUnitOfWork;
+
+        Mock<IMapper<Heroes, HeroesDTO>> mockMapHeroes;
+        Mock<IMapper<Weapons, WeaponsDTO>> mockMapWeapons;
+        Mock<IMapper<HeroWeapon, HeroWeaponsDTO>> mockMapHeroWeapons;
+        Mock<IMapper<HeroClothes, HeroClothesDTO>> mockMapHeroClothes;
+        Mock<IMapper<Clothes, ClothesDTO>> mockMapClothes;
+
+        Mock<IRepository<Weapons>> mockIWeaponsRepository;
+        Mock<IRepository<Heroes>> mockIHeroRepository;
+        Mock<IRepository<Clothes>> mockIClothesRepository;
+        public ShopServiceTests()
+        {
+            mockUnitOfWork = new Mock<IUnitOfWork>();
+
+            mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
+            mockMapWeapons = new Mock<IMapper<Weapons, WeaponsDTO>>();
+            mockMapHeroWeapons = new Mock<IMapper<HeroWeapon, HeroWeaponsDTO>>();
+            mockMapClothes = new Mock<IMapper<Clothes, ClothesDTO>>();
+            mockMapHeroClothes = new Mock<IMapper<HeroClothes, HeroClothesDTO>>();
+
+            mockIWeaponsRepository = new Mock<IRepository<Weapons>>();
+            mockIHeroRepository = new Mock<IRepository<Heroes>>();
+            mockIClothesRepository = new Mock<IRepository<Clothes>>();
+        }
         [Fact]
         public void GetClothesListForSellTestHeroAndClothByNull()
         {
             //arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-
-            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
-            var mockMapWeapons = new Mock<IMapper<Weapons, WeaponsDTO>>();
-            var mockMapHeroWeapons = new Mock<IMapper<HeroWeapon, HeroWeaponsDTO>>();
-            var mockMapHeroClothes = new Mock<IMapper<HeroClothes, HeroClothesDTO>>();
-            var mockMapClothes = new Mock<IMapper<Clothes, ClothesDTO>>();
-
-            var mockIHeroRepository = new Mock<IRepository<Heroes>>();
-
             mockIHeroRepository.Setup(x => x.GetItem(4));
-
             mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
 
             var shopService = new ShopService(mockUnitOfWork.Object, mockMapWeapons.Object, mockMapClothes.Object, mockMapHeroClothes.Object, mockMapHeroWeapons.Object);
@@ -46,19 +60,9 @@ namespace TheWitcher.Tests
         public void GetWeaponsListForSellTestHeroAndClothByNull()
         {
             //arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-
-            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
-            var mockMapWeapons = new Mock<IMapper<Weapons, WeaponsDTO>>();
-            var mockMapHeroWeapons = new Mock<IMapper<HeroWeapon, HeroWeaponsDTO>>();
-            var mockMapHeroClothes = new Mock<IMapper<HeroClothes, HeroClothesDTO>>();
-            var mockMapClothes = new Mock<IMapper<Clothes, ClothesDTO>>();
-
-            var mockIWeaponsRepository = new Mock<IRepository<Weapons>>();
-
-
             mockIWeaponsRepository.Setup(x => x.GetItemList());
 
+            mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
             mockUnitOfWork.Setup(x => x.Weapon).Returns(mockIWeaponsRepository.Object);
 
             var shopService = new ShopService(mockUnitOfWork.Object, mockMapWeapons.Object, mockMapClothes.Object, mockMapHeroClothes.Object, mockMapHeroWeapons.Object);
@@ -73,17 +77,6 @@ namespace TheWitcher.Tests
         public void GetClothesListForBuyTestHeroAndClothByNull()
         {
             //arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-
-            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
-            var mockMapWeapons = new Mock<IMapper<Weapons, WeaponsDTO>>();
-            var mockMapHeroWeapons = new Mock<IMapper<HeroWeapon, HeroWeaponsDTO>>();
-            var mockMapHeroClothes = new Mock<IMapper<HeroClothes, HeroClothesDTO>>();
-            var mockMapClothes = new Mock<IMapper<Clothes, ClothesDTO>>();
-
-            var mockIClothesRepository = new Mock<IRepository<Clothes>>();
-
-
             mockIClothesRepository.Setup(x => x.GetItemList());
 
             mockUnitOfWork.Setup(x => x.Clothes).Returns(mockIClothesRepository.Object);
@@ -100,16 +93,6 @@ namespace TheWitcher.Tests
         public void GetWeaponsListForBuyTestHeroAndClothByNull()
         {
             //arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-
-            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
-            var mockMapWeapons = new Mock<IMapper<Weapons, WeaponsDTO>>();
-            var mockMapHeroWeapons = new Mock<IMapper<HeroWeapon, HeroWeaponsDTO>>();
-            var mockMapHeroClothes = new Mock<IMapper<HeroClothes, HeroClothesDTO>>();
-            var mockMapClothes = new Mock<IMapper<Clothes, ClothesDTO>>();
-
-            var mockIWeaponsRepository = new Mock<IRepository<Weapons>>();
-
             mockIWeaponsRepository.Setup(x => x.GetItemList());
 
             mockUnitOfWork.Setup(x => x.Weapon).Returns(mockIWeaponsRepository.Object);
