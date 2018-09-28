@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using TheWitcher.Business;
+using TheWitcher.Business.Interfaces;
 using TheWitcher.Core;
 using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.Domain.Mappers;
@@ -14,14 +15,35 @@ namespace TheWitcher.Tests
 {
     public class HeroServiceTests
     {
+        Mock<IUnitOfWork> mockUnitOfWork;
+        Mock<IMapper<Heroes, HeroesDTO>> mockMapHeroes;
+        HeroService heroService;
+        Mock<IRepository<Heroes>> mockIHeroRepository;
+        Mock<IRepository<Quest>> mockIQuestRepository;
+        Mock<IRepository<HeroInQuest>> mockIHeroInQuestRepository;
+        Mock<IRepository<Clothes>> mockIClothesRepository;
+        Mock<IRepository<HeroClothes>> mockIHeroClothesRepository;
+        Mock<IRepository<Weapons>> mockIWeaponsRepository;
+        Mock<IRepository<HeroWeapon>> mockIHeroWeaponRepository;
+        public HeroServiceTests()
+        {
+            mockUnitOfWork = new Mock<IUnitOfWork>();
+            mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
+
+            mockIHeroRepository = new Mock<IRepository<Heroes>>();
+            mockIQuestRepository = new Mock<IRepository<Quest>>();
+            mockIHeroInQuestRepository = new Mock<IRepository<HeroInQuest>>();
+            mockIClothesRepository = new Mock<IRepository<Clothes>>();
+            mockIHeroClothesRepository = new Mock<IRepository<HeroClothes>>();
+            mockIWeaponsRepository = new Mock<IRepository<Weapons>>();
+            mockIHeroWeaponRepository = new Mock<IRepository<HeroWeapon>>();
+        }
+        
         [Fact]
         public void GetHeroDTOTestByNegativeId()
         {
             //arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
             var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
-
             //act
             var resultOfTest = heroService.GetHeroDTO(-1);
 
@@ -33,10 +55,6 @@ namespace TheWitcher.Tests
         public void GetHeroDTOTestByPositiveId()
         {
             //arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
-            var mockIHeroRepository = new Mock<IRepository<Heroes>>();
-
             Heroes hero = new Heroes()
             {
                 HeroMoney = 50,
@@ -71,12 +89,6 @@ namespace TheWitcher.Tests
         public void TakeTheQuestTest()
         {
             //arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
-            var mockIHeroRepository = new Mock<IRepository<Heroes>>();
-            var mockIQuestRepository = new Mock<IRepository<Quest>>();
-            var mockIHeroInQuestRepository = new Mock<IRepository<HeroInQuest>>();
-
             Clothes clothes1 = new Clothes()
             {
                 Id = 0,
@@ -129,12 +141,11 @@ namespace TheWitcher.Tests
             //assert
             Assert.True((bool)resultOfTest);
         }
+
         [Fact]
         public void ProcessCoefficientTest()
         {
             //arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
             Heroes hero = new Heroes()
             {
                 HeroMoney = 50,
@@ -166,6 +177,7 @@ namespace TheWitcher.Tests
             //assert
             Assert.True((bool)resultOfTest);
         }
+
         [Theory]
         [InlineData(-1, -1, false)]
         [InlineData(-1, 1, false)]
@@ -174,12 +186,6 @@ namespace TheWitcher.Tests
         public void BuyWeaponsTestByNullAndNegativeParameters(int heroId, int clothesId, bool resultOfTestExpected)
         {
             //arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-            var mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
-            var mockIHeroRepository = new Mock<IRepository<Heroes>>();
-            var mockIClothesRepository = new Mock<IRepository<Clothes>>();
-            var mockIHeroClothesRepository = new Mock<IRepository<HeroClothes>>();
-
             Heroes hero = new Heroes()
             {
                 HeroMoney = 50,
@@ -215,6 +221,125 @@ namespace TheWitcher.Tests
 
             //assert
             Assert.Equal(resultOfTestExpected, resultOfTest);
+        }
+
+        [Fact]
+        public void CheckHeroDTOItemByNull()
+        {
+            //arrange
+            mockIHeroRepository.Setup(x => x.GetItem(4));
+            mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
+            var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
+
+            //act
+            var resultOfTest = heroService.GetHeroDTO(4);
+
+            //assert
+            Assert.Null(resultOfTest);
+        }
+
+        [Fact]
+        public void CheckHeroQuestsTestHeroByNull()
+        {
+            //arrange
+            mockIHeroRepository.Setup(x => x.GetItem(4));
+            mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
+            var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
+
+            //act
+            var resultOfTest = heroService.CheckHeroQuests(4);
+
+            //assert
+            Assert.False(resultOfTest);
+        }
+
+        [Fact]
+        public void TakeTheQuestTestHeroAndQuestByNull()
+        {
+            //arrange
+            mockIHeroRepository.Setup(x => x.GetItem(4));
+            mockIQuestRepository.Setup(x => x.GetItem(4));
+            mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
+            mockUnitOfWork.Setup(x => x.Quest).Returns(mockIQuestRepository.Object);
+            var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
+
+            //act
+            var resultOfTest = heroService.TakeTheQuest(4, 4);
+
+            //assert
+            Assert.False(resultOfTest);
+        }
+
+        [Fact]
+        public void BuyClothesTestHeroAndClothByNull()
+        {
+            //arrange
+            mockIHeroRepository.Setup(x => x.GetItem(4));
+            mockIClothesRepository.Setup(x => x.GetItem(4));
+            mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
+            mockUnitOfWork.Setup(x => x.Clothes).Returns(mockIClothesRepository.Object);
+            var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
+
+            //act
+            var resultOfTest = heroService.BuyClothes(4, 4);
+
+            //assert
+            Assert.False(resultOfTest);
+        }
+
+        [Fact]
+        public void BuyWeaponsTestHeroAndClothByNull()
+        {
+            //arrange
+            mockIHeroRepository.Setup(x => x.GetItem(4));
+            mockIWeaponsRepository.Setup(x => x.GetItem(4));
+            mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
+            mockUnitOfWork.Setup(x => x.Weapon).Returns(mockIWeaponsRepository.Object);
+            var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
+
+            //act
+            var resultOfTest = heroService.BuyWeapons(4, 4);
+
+            //assert
+            Assert.False(resultOfTest);
+        }
+
+        [Fact]
+        public void SellWeaponTestHeroAndClothByNull()
+        {
+            //arrange
+            mockIHeroRepository.Setup(x => x.GetItem(4));
+            mockIWeaponsRepository.Setup(x => x.GetItem(4));
+            mockIHeroWeaponRepository.Setup(x => x.GetItem(4));
+            mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
+            mockUnitOfWork.Setup(x => x.HeroWeapon).Returns(mockIHeroWeaponRepository.Object);
+            mockUnitOfWork.Setup(x => x.Weapon).Returns(mockIWeaponsRepository.Object);
+            var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
+
+            //act
+            var resultOfTest = heroService.SellWeapon(4, 4);
+
+            //assert
+            Assert.False(resultOfTest);
+        }
+
+        [Fact]
+        public void SellClothesTestHeroAndClothByNull()
+        {
+            //arrange
+            mockIHeroRepository.Setup(x => x.GetItem(4));
+            mockIClothesRepository.Setup(x => x.GetItem(4));
+            mockIHeroClothesRepository.Setup(x => x.GetItem(4));
+            mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
+            mockUnitOfWork.Setup(x => x.Clothes).Returns(mockIClothesRepository.Object);
+            mockUnitOfWork.Setup(x => x.HeroClothes).Returns(mockIHeroClothesRepository.Object);
+            var heroService = new HeroService(mockUnitOfWork.Object, mockMapHeroes.Object);
+
+            //act
+            var resultOfTest = heroService.SellCloth(4, 4);
+
+            //assert
+            Assert.False(resultOfTest);
         }
     }
 }

@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder.cs" />
+    <Compile Include="Enums\StoreActionTypeEnum.cs" />
     <Compile Include="Enums\UserSelectedStoreEnum.cs" />
     <Compile Include="Enums\UserSelectionEnum.cs" />
     <Compile Include="Menu.cs" />

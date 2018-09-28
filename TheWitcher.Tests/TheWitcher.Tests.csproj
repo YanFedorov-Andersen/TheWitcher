@@ -78,6 +78,8 @@
   <ItemGroup>
     <Compile Include="HeroServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestServiceTests.cs" />
+    <Compile Include="ShopServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
