@@ -17,6 +17,7 @@ namespace TheWitcher
         private bool StoreSelectIsActive = true;
         private bool UserSelectingMainMenuOption = true;
         private bool UserSelectingStoreType = true;
+
         private const int DEFAULT_HERO_ID = 6;
         public Menu(IQuestService questService, IHeroService heroService, IShopService shopService)
         {

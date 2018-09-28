@@ -4,6 +4,7 @@ using System.Linq;
 using TheWitcher.Business.Interfaces;
 using TheWitcher.Core;
 using TheWitcher.DataAccess.Interfaces;
+using TheWitcher.DataAccess.Realization;
 using TheWitcher.Domain.Mappers;
 using TheWitcher.Domain.Models;
 
@@ -20,10 +21,12 @@ namespace TheWitcher.Business
         private readonly IRepository<HeroWeapon> _heroWeaponRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper<Heroes, HeroesDTO> _mapHeroes;
+
         private const int COEFFICIENT_PRICE_SELLING_OBJECTS = 3;
         private const bool ITEM_INITIAL_STATE = false;
         private const int BASIC_QUEST_AWARD = 150;
         private const int SECONDS_IN_MINUTE = 60;
+
         public HeroService(IUnitOfWork unitOfWork, IMapper<Heroes, HeroesDTO> mapHeroes)
         {
             _heroRepository = unitOfWork.Hero;
@@ -41,6 +44,10 @@ namespace TheWitcher.Business
             if (heroId >= 0)
             {
                 Heroes hero = _heroRepository.GetItem(heroId);
+                if(hero == null)
+                {
+                    return null;
+                }
                 HeroesDTO heroDTO = _mapHeroes.AutoMap(hero);
                 return heroDTO;
             }
@@ -54,6 +61,10 @@ namespace TheWitcher.Business
             }
             int totalPower = 0;
             var hero = _heroRepository.GetItem(id);
+            if (hero == null)
+            {
+                return -1;
+            }
             int clothesPower = hero.HeroClothes.Sum(x => x.Clothes.CombatPower).GetValueOrDefault();
             totalPower += clothesPower;
             int weaponsPower = hero.HeroWeapon.Sum(x => x.Weapons.CombatPower).GetValueOrDefault();
@@ -62,9 +73,21 @@ namespace TheWitcher.Business
         }
         private bool ProcessCoefficient(Heroes hero, Quest quest, int heroPower)
         {
-            if(hero == null || quest == null)
+            if (hero == null || quest == null)
             {
                 return false;
+            }
+            if (hero.ReleaseDate > DateTime.Now)
+            {
+                return false;
+            }
+            else if(hero.ReleaseDate < DateTime.Now)
+            {
+                hero.ReleaseDate = DateTime.Now;
+            }
+            else if (hero.ReleaseDate == null)
+            {
+                hero.ReleaseDate = DateTime.Now;
             }
             try
             {
@@ -72,10 +95,8 @@ namespace TheWitcher.Business
                 quest.Award = Convert.ToDecimal((hero.HeroLevel / coefficient * BASIC_QUEST_AWARD).Value);
                 double questTimeInSeconds = quest.LeadTime.Value.Seconds + quest.LeadTime.Value.Minutes * SECONDS_IN_MINUTE;
                 int newQuestTimeInSeconds = Convert.ToInt32(questTimeInSeconds / (hero.HeroLevel.Value * coefficient));
-                TimeSpan addingTimeSpan = TimeSpan.FromSeconds(newQuestTimeInSeconds);
-                quest.LeadTime = addingTimeSpan;
-                hero.ReleaseDate = DateTime.Now;
                 var heroReleaseDate = hero.ReleaseDate.Value.AddSeconds(newQuestTimeInSeconds);
+                hero.ReleaseDate = heroReleaseDate;
                 return true;
             }
             catch(DivideByZeroException divideByZero)
@@ -88,19 +109,28 @@ namespace TheWitcher.Business
                 throw new Exception(String.Format("Exeption: {0}", exeption.Message), exeption);
             }
         }
-        public void CheckHeroQuests(int heroId)
+        public bool CheckHeroQuests(int heroId)
         {
             var hero = _heroRepository.GetItem(heroId);
+            if (hero == null)
+            {
+                return false;
+            }
             var activeHeroQuests = hero.HeroInQuest.ToList();
+            if(activeHeroQuests == null)
+            {
+                return false;
+            }
             foreach(var quest in activeHeroQuests)
             {
-                if(quest.StartTime.Value < DateTime.Now)
+                if(hero.ReleaseDate.Value < DateTime.Now)
                 {
                     hero.HeroMoney += quest.Quest.Award;
                     _heroInQuestRepository.Delete(quest.Id);
                 }
             }
             _heroRepository.Update(hero);
+            return true;
         }
 
         public bool TakeTheQuest(int heroId, int questId)
@@ -111,6 +141,10 @@ namespace TheWitcher.Business
             }
             var hero = _heroRepository.GetItem(heroId);
             var quest = _questRepository.GetItem(questId);
+            if (hero == null || quest == null)
+            {
+                return false;
+            }
             int heroPower = CountPowerOfHero(heroId);
             if (heroPower > quest.Complexity)
             {
@@ -156,7 +190,11 @@ namespace TheWitcher.Business
             }
             var hero = _heroRepository.GetItem(heroId);
             var cloth = _clothesRepository.GetItem(clothesId);
-            if(hero.HeroMoney> cloth.PriceOfBuy && hero.AvailableWeight > cloth.ClothesWeight.Value)
+            if (hero == null || cloth == null)
+            {
+                return false;
+            }
+            if (hero.HeroMoney> cloth.PriceOfBuy && hero.AvailableWeight > cloth.ClothesWeight.Value)
             {
                 hero.HeroMoney -= cloth.PriceOfBuy;
                 hero.AvailableWeight -= cloth.ClothesWeight.Value;
@@ -198,6 +236,10 @@ namespace TheWitcher.Business
             }
             var hero = _heroRepository.GetItem(heroId);
             var weapon = _weaponsRepository.GetItem(weaponsId);
+            if (hero == null || weapon == null)
+            {
+                return false;
+            }
             if (hero.HeroMoney > weapon.PriceOfBuy && hero.AvailableWeight > weapon.WeaponWeight.Value)
             {
                 hero.HeroMoney -= weapon.PriceOfBuy;
@@ -239,23 +281,29 @@ namespace TheWitcher.Business
                 return false;
             }
             var hero = _heroRepository.GetItem(heroId);
-            var weaponId = _heroWeaponRepository.GetItem(heroWeaponsId).WeaponId;
+            var heroWeaponObj = _heroWeaponRepository.GetItem(heroWeaponsId);
+            if (heroWeaponObj == null)
+            {
+                return false;
+            }
+            var weaponId = heroWeaponObj.WeaponId;
             var weapon = _weaponsRepository.GetItem(weaponId.Value);
+            if (hero == null || weapon == null)
+            {
+                return false;
+            }
             HeroWeapon heroWeapon;
-            try
+            heroWeapon = hero.HeroWeapon.FirstOrDefault(x => x.Id == heroWeaponsId);
+            if (heroWeapon == null)
             {
-                heroWeapon = hero.HeroWeapon.FirstOrDefault(x => x.Id == heroWeaponsId);
-                hero.HeroMoney += heroWeapon.PriceOfSell;
+                return false;
             }
-            catch (NullReferenceException exeption)
-            {
-                throw new NullReferenceException("heroWeapon in heroWeapon table probably null", exeption);
-            }
+            hero.HeroMoney += heroWeapon.PriceOfSell;
             hero.AvailableWeight += Convert.ToInt32(weapon.WeaponWeight.Value);
             _unitOfWork.BeginTransaction();
             try
             {
-               var idOfDeletedItem = _heroWeaponRepository.Delete(heroWeapon.Id);
+                var idOfDeletedItem = _heroWeaponRepository.Delete(heroWeapon.Id);
                 _heroRepository.Update(hero);
                 _unitOfWork.EndTransaction();
                 return true;
@@ -263,7 +311,7 @@ namespace TheWitcher.Business
             catch (NullReferenceException nullRefExep)
             {
                 _unitOfWork.RollBack();
-                throw new NullReferenceException("Hero in hero service probably null", nullRefExep);
+                throw new NullReferenceException("Some repository in hero service probably null", nullRefExep);
             }
             catch (Exception exeption)
             {
@@ -279,20 +327,27 @@ namespace TheWitcher.Business
                 return false;
             }
             var hero = _heroRepository.GetItem(heroId);
-            var clothId = _heroClothesRepository.GetItem(heroClothId).ClothesId;
-            var cloth = _clothesRepository.GetItem(clothId.Value);
-            HeroClothes heroCloth;
-            try
+            var heroClothObj = _heroClothesRepository.GetItem(heroClothId);
+            if (heroClothObj == null)
             {
-                heroCloth = hero.HeroClothes.FirstOrDefault(x => x.Id == heroClothId);
-                hero.HeroMoney += heroCloth.PriceOfSell;
+                return false;
             }
-            catch (NullReferenceException exeption)
+            var clothId = heroClothObj.ClothesId;
+            var cloth = _clothesRepository.GetItem(clothId.Value);
+            if (hero == null || cloth == null)
             {
-                throw new NullReferenceException("heroCloth in heroClothes table probably null", exeption);
+                return false;
             }
 
-    hero.AvailableWeight += Convert.ToInt32(cloth.ClothesWeight.Value);
+            HeroClothes heroCloth = hero.HeroClothes.FirstOrDefault(x => x.Id == heroClothId);
+            if (heroCloth == null)
+            {
+                return false;
+            }
+            hero.HeroMoney += heroCloth.PriceOfSell;
+
+
+            hero.AvailableWeight += Convert.ToInt32(cloth.ClothesWeight.Value);
             _unitOfWork.BeginTransaction();
             try
             {
@@ -304,7 +359,7 @@ namespace TheWitcher.Business
             catch (NullReferenceException nullRefExep)
             {
                 _unitOfWork.RollBack();
-                 throw new NullReferenceException("Hero in hero service probably null", nullRefExep);
+                throw new NullReferenceException("Hero in hero service probably null", nullRefExep);
             }
             catch (Exception exeption)
             {

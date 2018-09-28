@@ -39,7 +39,7 @@ namespace TheWitcher.DataAccess.Realization
 
         public Heroes GetItem(int id)
         {
-            return _dataBase.Heroes.Find(id);
+            return _dataBase.Heroes.FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<Heroes> GetItemList()
