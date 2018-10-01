@@ -1,6 +1,6 @@
-﻿using TheWitcher.Core;
-using DataAccessLayer.Interfaces;
+﻿using DataAccessLayer.Interfaces;
 using TheWitcher.DataAccess.Interfaces;
+using TheWitcher.DataAccess.Core;
 
 namespace TheWitcher.DataAccess.Realization
 {

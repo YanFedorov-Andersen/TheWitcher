@@ -7,7 +7,7 @@
     <ProjectGuid>{6BF1D4CE-9628-45AA-B782-5DEA24C6DD5E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataAccessLayer</RootNamespace>
+    <RootNamespace>TheWitcher.DataAccess</RootNamespace>
     <AssemblyName>DataAccessLayer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

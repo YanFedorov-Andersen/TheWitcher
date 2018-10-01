@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 using TheWitcher.Business.Interfaces;
-using TheWitcher.Core;
+using TheWitcher.DataAccess.Core;
 using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.DataAccess.Realization;
 using TheWitcher.Domain.Mappers;
@@ -53,7 +53,7 @@ namespace TheWitcher.Business
             }
             return null;
         }
-        private int CountPowerOfHero(int id)
+        public int CountPowerOfHero(int id)
         {
             if (id < 0)
             {
@@ -87,7 +87,7 @@ namespace TheWitcher.Business
                 double coefficient = heroPower / quest.Complexity.Value;
                 quest.Award = Convert.ToDecimal((hero.HeroLevel / coefficient * BASIC_QUEST_AWARD).Value);
                 double questTimeInSeconds = quest.LeadTime.Value.Seconds + quest.LeadTime.Value.Minutes * SECONDS_IN_MINUTE;
-                int newQuestTimeInSeconds = Convert.ToInt32(questTimeInSeconds / (hero.HeroLevel.Value * coefficient));
+                int newQuestTimeInSeconds = Convert.ToInt32(questTimeInSeconds / coefficient);
                 var heroReleaseDate = hero.ReleaseDate.Value.AddSeconds(newQuestTimeInSeconds);
                 hero.ReleaseDate = heroReleaseDate;
                 return true;
@@ -118,6 +118,7 @@ namespace TheWitcher.Business
                 {
                     hero.HeroMoney += quest.Quest.Award;
                     _heroInQuestRepository.Delete(quest.Id);
+                    hero.HeroLevel += 1;
                 }
             }
 
@@ -136,6 +137,10 @@ namespace TheWitcher.Business
             var quest = _questRepository.GetItem(questId);
 
             if (hero == null || quest == null)
+            {
+                return false;
+            }
+            if (hero.HeroInQuest.Count != 0)
             {
                 return false;
             }

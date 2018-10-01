@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TheWitcher.Core
+namespace TheWitcher.DataAccess.Core
 {
     using System;
     using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace TheWitcher.Core
         public Nullable<int> WeaponType { get; set; }
         public Nullable<decimal> PriceOfBuy { get; set; }
         public Nullable<int> WeaponAccessLevel { get; set; }
-        public Nullable<decimal> WeaponWeight { get; set; }
+        public Nullable<int> WeaponWeight { get; set; }
         public string Characteristics { get; set; }
         public Nullable<int> CombatPower { get; set; }
     

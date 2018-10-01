@@ -17,7 +17,6 @@ namespace TheWitcher.Tests
     {
         Mock<IUnitOfWork> mockUnitOfWork;
         Mock<IMapper<Heroes, HeroesDTO>> mockMapHeroes;
-        HeroService heroService;
         Mock<IRepository<Heroes>> mockIHeroRepository;
         Mock<IRepository<Quest>> mockIQuestRepository;
         Mock<IRepository<HeroInQuest>> mockIHeroInQuestRepository;
@@ -29,7 +28,6 @@ namespace TheWitcher.Tests
         {
             mockUnitOfWork = new Mock<IUnitOfWork>();
             mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
-
             mockIHeroRepository = new Mock<IRepository<Heroes>>();
             mockIQuestRepository = new Mock<IRepository<Quest>>();
             mockIHeroInQuestRepository = new Mock<IRepository<HeroInQuest>>();

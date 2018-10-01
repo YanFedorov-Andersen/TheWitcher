@@ -47,7 +47,7 @@
           <Property Name="Playable" Type="bit" />
           <Property Name="HeroDescription" Type="nvarchar" MaxLength="200" />
           <Property Name="AvailableWeight" Type="int" />
-          <Property Name="ReleaseDate" Type="smalldatetime" />
+          <Property Name="ReleaseDate" Type="datetime" />
         </EntityType>
         <EntityType Name="HeroInQuest">
           <Key>
@@ -56,7 +56,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="HeroId" Type="int" />
           <Property Name="QuestId" Type="int" />
-          <Property Name="StartTime" Type="smalldatetime" />
+          <Property Name="StartTime" Type="datetime" />
         </EntityType>
         <EntityType Name="HeroWeapon">
           <Key>
@@ -97,7 +97,7 @@
           <Property Name="WeaponType" Type="int" />
           <Property Name="PriceOfBuy" Type="smallmoney" />
           <Property Name="WeaponAccessLevel" Type="int" />
-          <Property Name="WeaponWeight" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="WeaponWeight" Type="int" />
           <Property Name="Characteristics" Type="nvarchar" MaxLength="200" />
           <Property Name="CombatPower" Type="int" />
         </EntityType>
@@ -300,7 +300,7 @@
           <Property Name="Playable" Type="Boolean" />
           <Property Name="HeroDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AvailableWeight" Type="Int32" />
-          <Property Name="ReleaseDate" Type="DateTime" Precision="0" />
+          <Property Name="ReleaseDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="HeroClothes" Relationship="Self.FK__HeroCloth__HeroI__5165187F" FromRole="Heroes" ToRole="HeroClothes" />
           <NavigationProperty Name="HeroInQuest" Relationship="Self.FK__HeroInQue__HeroI__5812160E" FromRole="Heroes" ToRole="HeroInQuest" />
           <NavigationProperty Name="HeroWeapon" Relationship="Self.FK__HeroWeapo__HeroI__4AB81AF0" FromRole="Heroes" ToRole="HeroWeapon" />
@@ -312,7 +312,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HeroId" Type="Int32" />
           <Property Name="QuestId" Type="Int32" />
-          <Property Name="StartTime" Type="DateTime" Precision="0" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Heroes" Relationship="Self.FK__HeroInQue__HeroI__5812160E" FromRole="HeroInQuest" ToRole="Heroes" />
           <NavigationProperty Name="Quest" Relationship="Self.FK__HeroInQue__Quest__59063A47" FromRole="HeroInQuest" ToRole="Quest" />
         </EntityType>
@@ -358,7 +358,7 @@
           <Property Name="WeaponType" Type="Int32" />
           <Property Name="PriceOfBuy" Type="Decimal" Precision="10" Scale="4" />
           <Property Name="WeaponAccessLevel" Type="Int32" />
-          <Property Name="WeaponWeight" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="WeaponWeight" Type="Int32" />
           <Property Name="Characteristics" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="HeroWeapon" Relationship="Self.FK__HeroWeapo__Weapo__4BAC3F29" FromRole="Weapons" ToRole="HeroWeapon" />
           <NavigationProperty Name="WeaponsType" Relationship="Self.FK__Weapons__WeaponT__68487DD7" FromRole="Weapons" ToRole="WeaponsType" />

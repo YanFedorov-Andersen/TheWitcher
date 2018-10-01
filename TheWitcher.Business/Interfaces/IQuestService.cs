@@ -6,5 +6,6 @@ namespace TheWitcher.Business.Interfaces
     public interface IQuestService
     {
         List<QuestDTO> GetNameIdLeadTimeQuests(HeroesDTO hero);
+        int GetHeroQuestProgress(int heroId);
     }
 }
