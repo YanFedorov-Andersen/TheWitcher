@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 using TheWitcher.Business.Interfaces;
-using TheWitcher.Core;
+using TheWitcher.DataAccess.Core;
 using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.DataAccess.Realization;
 using TheWitcher.Domain.Mappers;
@@ -26,6 +26,7 @@ namespace TheWitcher.Business
         private const bool ITEM_INITIAL_STATE = false;
         private const int BASIC_QUEST_AWARD = 150;
         private const int SECONDS_IN_MINUTE = 60;
+        private const int DEFAULT_HEROQUEST_ID = 6;
 
         public HeroService(IUnitOfWork unitOfWork, IMapper<Heroes, HeroesDTO> mapHeroes)
         {
@@ -53,7 +54,7 @@ namespace TheWitcher.Business
             }
             return null;
         }
-        private int CountPowerOfHero(int id)
+        public int CountPowerOfHero(int id)
         {
             if (id < 0)
             {
@@ -87,7 +88,7 @@ namespace TheWitcher.Business
                 double coefficient = heroPower / quest.Complexity.Value;
                 quest.Award = Convert.ToDecimal((hero.HeroLevel / coefficient * BASIC_QUEST_AWARD).Value);
                 double questTimeInSeconds = quest.LeadTime.Value.Seconds + quest.LeadTime.Value.Minutes * SECONDS_IN_MINUTE;
-                int newQuestTimeInSeconds = Convert.ToInt32(questTimeInSeconds / (hero.HeroLevel.Value * coefficient));
+                int newQuestTimeInSeconds = Convert.ToInt32(questTimeInSeconds / coefficient);
                 var heroReleaseDate = hero.ReleaseDate.Value.AddSeconds(newQuestTimeInSeconds);
                 hero.ReleaseDate = heroReleaseDate;
                 return true;
@@ -112,16 +113,25 @@ namespace TheWitcher.Business
 
             var activeHeroQuests = hero.HeroInQuest.ToList();
 
-            foreach(var quest in activeHeroQuests)
+            foreach (var quest in activeHeroQuests)
             {
-                if(hero.ReleaseDate.Value < DateTime.Now)
+                if (hero.ReleaseDate.Value < DateTime.Now)
                 {
+                    _unitOfWork.BeginTransaction();
                     hero.HeroMoney += quest.Quest.Award;
-                    _heroInQuestRepository.Delete(quest.Id);
+                    int resultOfDeleteOperation = _heroInQuestRepository.Delete(quest.Id);
+
+                    if (resultOfDeleteOperation == -1)
+                    {
+                        _unitOfWork.RollBack();
+                        return false;
+                    }
+
+                    hero.HeroLevel++;
+                    _heroRepository.Update(hero);
+                    _unitOfWork.EndTransaction();
                 }
             }
-
-            _heroRepository.Update(hero);
             return true;
         }
 
@@ -135,7 +145,7 @@ namespace TheWitcher.Business
             var hero = _heroRepository.GetItem(heroId);
             var quest = _questRepository.GetItem(questId);
 
-            if (hero == null || quest == null)
+            if (hero == null || quest == null || hero.HeroInQuest.Count != 0)
             {
                 return false;
             }
@@ -150,6 +160,9 @@ namespace TheWitcher.Business
 
                     HeroInQuest heroInQuest = new HeroInQuest()
                     {
+                        Id = DEFAULT_HEROQUEST_ID,
+                        Heroes = hero,
+                        Quest = quest,
                         HeroId = heroId,
                         QuestId = questId,
                         StartTime = DateTime.Now,
@@ -245,7 +258,7 @@ namespace TheWitcher.Business
             if (hero.HeroMoney > weapon.PriceOfBuy && hero.AvailableWeight > weapon.WeaponWeight.Value)
             {
                 hero.HeroMoney -= weapon.PriceOfBuy;
-                hero.AvailableWeight -= Convert.ToInt32(weapon.WeaponWeight.Value);
+                hero.AvailableWeight -= weapon.WeaponWeight.Value;
                 HeroWeapon heroWeapon = new HeroWeapon()
                 {
                     HeroId = heroId,
@@ -300,14 +313,7 @@ namespace TheWitcher.Business
             }
 
             hero.HeroMoney += heroWeapon.PriceOfSell;
-            try
-            {
-                hero.AvailableWeight += Convert.ToInt32(weapon.WeaponWeight.Value);
-            }
-            catch (OverflowException exeption)
-            {
-                throw new OverflowException("Can not convert decimal to int becouse of OverFlow", exeption);
-            }
+            hero.AvailableWeight += weapon.WeaponWeight.Value;
 
             _unitOfWork.BeginTransaction();
 

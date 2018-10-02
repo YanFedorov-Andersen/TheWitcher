@@ -11,6 +11,6 @@ namespace TheWitcher.Business.Interfaces
         bool BuyWeapons(int heroId, int weaponsId);
         bool SellWeapon(int heroId, int weaponsId);
         bool SellCloth(int heroId, int clothId);
-
+        int CountPowerOfHero(int id);
     }
 }

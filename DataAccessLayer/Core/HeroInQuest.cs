@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TheWitcher.Core
+namespace TheWitcher.DataAccess.Core
 {
     using System;
     using System.Collections.Generic;

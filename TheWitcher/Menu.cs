@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TheWitcher.Business;
 using TheWitcher.Business.Interfaces;
 using TheWitcher.Domain.Models;
 using TheWitcher.Enums;
@@ -32,30 +31,47 @@ namespace TheWitcher
         public void GameMenu()
         {
             int heroId = DEFAULT_HERO_ID;
-            HeroesDTO heroDTO = _heroService.GetHeroDTO(heroId);
             do
             {
                 Console.WriteLine("Выберете, что вы хотите сделать, для этого укажите цифру нужного вам пункта:");
                 UserSelection userAnswer = SelectGame();
+                _heroService.CheckHeroQuests(heroId);
+                HeroesDTO heroDTO = _heroService.GetHeroDTO(heroId);
+                heroDTO.HeroTotalPower = _heroService.CountPowerOfHero(heroId);
                 switch (userAnswer)
                 {
                     case UserSelection.Quests:
                         DisplayAvailableQuests(heroDTO);
-                        ChooseQuest(heroDTO.Id);
+                        ChooseQuest(DEFAULT_HERO_ID);
                         break;
                     case UserSelection.Stores:
                         Store(heroDTO, heroId);
                         break;
                     case UserSelection.Statisctic:
-                        _heroService.CheckHeroQuests(heroId);
-                        heroDTO = _heroService.GetHeroDTO(heroId);
                         GetHeroStatistic(heroDTO);
+                        break;
+                    case UserSelection.CurrentQuestProgress:
+                        GetCurrentQuestProgress();
                         break;
                     case UserSelection.Exit:
                         GameIsActive = false;
                         break;
                 }
             } while (GameIsActive);
+        }
+        private void GetCurrentQuestProgress()
+        {
+            Console.WriteLine("Текущий прогресс квеста:");
+            var percentOfProgress = _questService.GetHeroQuestProgress(DEFAULT_HERO_ID);
+
+            if (percentOfProgress == -1)
+            {
+                Console.WriteLine("Статистика не доступна, возможно, отсутствует текущий квест у героя.");
+            }
+            else
+            {
+                Console.WriteLine($"Выполнено {percentOfProgress}% квеста.");
+            }
         }
 
         private void GetHeroStatistic(HeroesDTO heroDTO)
@@ -68,6 +84,7 @@ namespace TheWitcher
         private void DisplayAvailableQuests(HeroesDTO hero)
         {
             List<QuestDTO> questsDTO = _questService.GetNameIdLeadTimeQuests(hero);
+
             try
             {
                 foreach (var quest in questsDTO)
@@ -99,7 +116,8 @@ namespace TheWitcher
 0 - Перейти к доступным заданиям
 1 - Перейти в магазин
 2 - Отобразить статистику героя
-3 - Выйти из игры");
+3 - Отобразить текущий прогресс квеста
+4 - Выйти из игры");
             UserSelection userSelection;
             do
             {
@@ -114,6 +132,7 @@ namespace TheWitcher
                     Console.WriteLine("Выбранное вами поле не доступно, попробуйте ещё раз.");
                 }
             } while (UserSelectingMainMenuOption);
+
             return userSelection;
         }
         private UserSelectedStore UserSelectStore()
@@ -123,6 +142,7 @@ namespace TheWitcher
             Console.WriteLine("Для выбора магазина одежды - нажмите 1");
             Console.WriteLine("Для выхода в главное меню - нажмите 2");
             UserSelectedStore userSelectedStore;
+
             do
             {
                 string storeSelected = Console.ReadLine();
@@ -136,20 +156,18 @@ namespace TheWitcher
                     Console.WriteLine("Выбранное вами поле не доступно, попробуйте ещё раз.");
                 }
             } while (StoreSelectIsActive);
+
             return userSelectedStore;
         }
         private void Store(HeroesDTO heroDTO, int heroId)
         {
             _heroService.CheckHeroQuests(heroId);
             heroDTO = _heroService.GetHeroDTO(heroId);
-
-            //нужно теперь распределение для магазина продаж и покупок
             UserSelectedStore userSelectedStore;
             userSelectedStore = UserSelectStore();
             ChooseStore(userSelectedStore);
-
         }
-    
+
         private StoreActionType UserSelectActionType()
         {
             UserSelectingStoreType = true;
@@ -168,6 +186,7 @@ namespace TheWitcher
                     Console.WriteLine("Выбранное вами поле не доступно, попробуйте ещё раз.");
                 }
             } while (UserSelectingStoreType);
+
             return userSelection;
         }
         private void DisplayWeaponsStore(StoreActionType storeActionType)
@@ -175,7 +194,6 @@ namespace TheWitcher
             Console.WriteLine("Вы находитесь в магазине оружия, для выбора, укажите соответствующий номер");
             List<WeaponsDTO> weaponListForBuy;
             List<HeroWeaponsDTO> weaponListForSell;
-            int numberOfThings = 0;
             int userAnswer;
             switch (storeActionType)
             {
@@ -236,12 +254,13 @@ namespace TheWitcher
                 var itemSelected = Console.ReadLine();
                 tryParse = int.TryParse(itemSelected, out itemId);
             } while (!tryParse);
+
             return itemId;
         }
         private void ChooseStore(UserSelectedStore userSelectStore)
         {
-        var storeActionType = UserSelectActionType();
-        switch (userSelectStore)
+            var storeActionType = UserSelectActionType();
+            switch (userSelectStore)
             {
                 case UserSelectedStore.WeaponStore:
                     DisplayWeaponsStore(storeActionType);

@@ -47,7 +47,7 @@
           <Property Name="Playable" Type="bit" />
           <Property Name="HeroDescription" Type="nvarchar" MaxLength="200" />
           <Property Name="AvailableWeight" Type="int" />
-          <Property Name="ReleaseDate" Type="smalldatetime" />
+          <Property Name="ReleaseDate" Type="datetime" />
         </EntityType>
         <EntityType Name="HeroInQuest">
           <Key>
@@ -56,7 +56,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="HeroId" Type="int" />
           <Property Name="QuestId" Type="int" />
-          <Property Name="StartTime" Type="smalldatetime" />
+          <Property Name="StartTime" Type="datetime" />
         </EntityType>
         <EntityType Name="HeroWeapon">
           <Key>
@@ -97,7 +97,7 @@
           <Property Name="WeaponType" Type="int" />
           <Property Name="PriceOfBuy" Type="smallmoney" />
           <Property Name="WeaponAccessLevel" Type="int" />
-          <Property Name="WeaponWeight" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="WeaponWeight" Type="int" />
           <Property Name="Characteristics" Type="nvarchar" MaxLength="200" />
           <Property Name="CombatPower" Type="int" />
         </EntityType>
@@ -253,6 +253,50 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TheWitcherModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TheWitcherEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clothes" EntityType="TheWitcherModel.Clothes" />
+          <EntitySet Name="ClothesType" EntityType="TheWitcherModel.ClothesType" />
+          <EntitySet Name="HeroClothes" EntityType="TheWitcherModel.HeroClothes" />
+          <EntitySet Name="Heroes" EntityType="TheWitcherModel.Heroes" />
+          <EntitySet Name="HeroInQuest" EntityType="TheWitcherModel.HeroInQuest" />
+          <EntitySet Name="HeroWeapon" EntityType="TheWitcherModel.HeroWeapon" />
+          <EntitySet Name="Quest" EntityType="TheWitcherModel.Quest" />
+          <EntitySet Name="sysdiagrams" EntityType="TheWitcherModel.sysdiagrams" />
+          <EntitySet Name="Weapons" EntityType="TheWitcherModel.Weapons" />
+          <EntitySet Name="WeaponsType" EntityType="TheWitcherModel.WeaponsType" />
+          <AssociationSet Name="FK__Clothes__Clothes__693CA210" Association="TheWitcherModel.FK__Clothes__Clothes__693CA210">
+            <End Role="ClothesType" EntitySet="ClothesType" />
+            <End Role="Clothes" EntitySet="Clothes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__HeroCloth__Cloth__52593CB8" Association="TheWitcherModel.FK__HeroCloth__Cloth__52593CB8">
+            <End Role="Clothes" EntitySet="Clothes" />
+            <End Role="HeroClothes" EntitySet="HeroClothes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__HeroCloth__HeroI__5165187F" Association="TheWitcherModel.FK__HeroCloth__HeroI__5165187F">
+            <End Role="Heroes" EntitySet="Heroes" />
+            <End Role="HeroClothes" EntitySet="HeroClothes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__HeroInQue__HeroI__5812160E" Association="TheWitcherModel.FK__HeroInQue__HeroI__5812160E">
+            <End Role="Heroes" EntitySet="Heroes" />
+            <End Role="HeroInQuest" EntitySet="HeroInQuest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__HeroWeapo__HeroI__4AB81AF0" Association="TheWitcherModel.FK__HeroWeapo__HeroI__4AB81AF0">
+            <End Role="Heroes" EntitySet="Heroes" />
+            <End Role="HeroWeapon" EntitySet="HeroWeapon" />
+          </AssociationSet>
+          <AssociationSet Name="FK__HeroInQue__Quest__59063A47" Association="TheWitcherModel.FK__HeroInQue__Quest__59063A47">
+            <End Role="Quest" EntitySet="Quest" />
+            <End Role="HeroInQuest" EntitySet="HeroInQuest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__HeroWeapo__Weapo__4BAC3F29" Association="TheWitcherModel.FK__HeroWeapo__Weapo__4BAC3F29">
+            <End Role="Weapons" EntitySet="Weapons" />
+            <End Role="HeroWeapon" EntitySet="HeroWeapon" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Weapons__WeaponT__68487DD7" Association="TheWitcherModel.FK__Weapons__WeaponT__68487DD7">
+            <End Role="WeaponsType" EntitySet="WeaponsType" />
+            <End Role="Weapons" EntitySet="Weapons" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Clothes">
           <Key>
             <PropertyRef Name="Id" />
@@ -264,9 +308,9 @@
           <Property Name="ClothesWeight" Type="Int32" />
           <Property Name="Characteristics" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Colour" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ClothesType1" Relationship="Self.FK__Clothes__Clothes__693CA210" FromRole="Clothes" ToRole="ClothesType" />
-          <NavigationProperty Name="HeroClothes" Relationship="Self.FK__HeroCloth__Cloth__52593CB8" FromRole="Clothes" ToRole="HeroClothes" />
           <Property Name="CombatPower" Type="Int32" />
+          <NavigationProperty Name="ClothesType1" Relationship="TheWitcherModel.FK__Clothes__Clothes__693CA210" FromRole="Clothes" ToRole="ClothesType" />
+          <NavigationProperty Name="HeroClothes" Relationship="TheWitcherModel.FK__HeroCloth__Cloth__52593CB8" FromRole="Clothes" ToRole="HeroClothes" />
         </EntityType>
         <EntityType Name="ClothesType">
           <Key>
@@ -275,7 +319,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ClothesType1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="TypeCharacteristics" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Clothes" Relationship="Self.FK__Clothes__Clothes__693CA210" FromRole="ClothesType" ToRole="Clothes" />
+          <NavigationProperty Name="Clothes" Relationship="TheWitcherModel.FK__Clothes__Clothes__693CA210" FromRole="ClothesType" ToRole="Clothes" />
         </EntityType>
         <EntityType Name="HeroClothes">
           <Key>
@@ -286,8 +330,8 @@
           <Property Name="ClothesId" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="PriceOfSell" Type="Decimal" Precision="10" Scale="4" />
-          <NavigationProperty Name="Clothes" Relationship="Self.FK__HeroCloth__Cloth__52593CB8" FromRole="HeroClothes" ToRole="Clothes" />
-          <NavigationProperty Name="Heroes" Relationship="Self.FK__HeroCloth__HeroI__5165187F" FromRole="HeroClothes" ToRole="Heroes" />
+          <NavigationProperty Name="Clothes" Relationship="TheWitcherModel.FK__HeroCloth__Cloth__52593CB8" FromRole="HeroClothes" ToRole="Clothes" />
+          <NavigationProperty Name="Heroes" Relationship="TheWitcherModel.FK__HeroCloth__HeroI__5165187F" FromRole="HeroClothes" ToRole="Heroes" />
         </EntityType>
         <EntityType Name="Heroes">
           <Key>
@@ -300,10 +344,10 @@
           <Property Name="Playable" Type="Boolean" />
           <Property Name="HeroDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AvailableWeight" Type="Int32" />
-          <Property Name="ReleaseDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="HeroClothes" Relationship="Self.FK__HeroCloth__HeroI__5165187F" FromRole="Heroes" ToRole="HeroClothes" />
-          <NavigationProperty Name="HeroInQuest" Relationship="Self.FK__HeroInQue__HeroI__5812160E" FromRole="Heroes" ToRole="HeroInQuest" />
-          <NavigationProperty Name="HeroWeapon" Relationship="Self.FK__HeroWeapo__HeroI__4AB81AF0" FromRole="Heroes" ToRole="HeroWeapon" />
+          <Property Name="ReleaseDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="HeroClothes" Relationship="TheWitcherModel.FK__HeroCloth__HeroI__5165187F" FromRole="Heroes" ToRole="HeroClothes" />
+          <NavigationProperty Name="HeroInQuest" Relationship="TheWitcherModel.FK__HeroInQue__HeroI__5812160E" FromRole="Heroes" ToRole="HeroInQuest" />
+          <NavigationProperty Name="HeroWeapon" Relationship="TheWitcherModel.FK__HeroWeapo__HeroI__4AB81AF0" FromRole="Heroes" ToRole="HeroWeapon" />
         </EntityType>
         <EntityType Name="HeroInQuest">
           <Key>
@@ -312,9 +356,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HeroId" Type="Int32" />
           <Property Name="QuestId" Type="Int32" />
-          <Property Name="StartTime" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Heroes" Relationship="Self.FK__HeroInQue__HeroI__5812160E" FromRole="HeroInQuest" ToRole="Heroes" />
-          <NavigationProperty Name="Quest" Relationship="Self.FK__HeroInQue__Quest__59063A47" FromRole="HeroInQuest" ToRole="Quest" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Heroes" Relationship="TheWitcherModel.FK__HeroInQue__HeroI__5812160E" FromRole="HeroInQuest" ToRole="Heroes" />
+          <NavigationProperty Name="Quest" Relationship="TheWitcherModel.FK__HeroInQue__Quest__59063A47" FromRole="HeroInQuest" ToRole="Quest" />
         </EntityType>
         <EntityType Name="HeroWeapon">
           <Key>
@@ -325,8 +369,8 @@
           <Property Name="WeaponId" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="PriceOfSell" Type="Decimal" Precision="10" Scale="4" />
-          <NavigationProperty Name="Heroes" Relationship="Self.FK__HeroWeapo__HeroI__4AB81AF0" FromRole="HeroWeapon" ToRole="Heroes" />
-          <NavigationProperty Name="Weapons" Relationship="Self.FK__HeroWeapo__Weapo__4BAC3F29" FromRole="HeroWeapon" ToRole="Weapons" />
+          <NavigationProperty Name="Heroes" Relationship="TheWitcherModel.FK__HeroWeapo__HeroI__4AB81AF0" FromRole="HeroWeapon" ToRole="Heroes" />
+          <NavigationProperty Name="Weapons" Relationship="TheWitcherModel.FK__HeroWeapo__Weapo__4BAC3F29" FromRole="HeroWeapon" ToRole="Weapons" />
         </EntityType>
         <EntityType Name="Quest">
           <Key>
@@ -337,14 +381,14 @@
           <Property Name="Award" Type="Decimal" Precision="10" Scale="4" />
           <Property Name="LeadTime" Type="Time" Precision="7" />
           <Property Name="AccessLevel" Type="Int32" />
-          <NavigationProperty Name="HeroInQuest" Relationship="Self.FK__HeroInQue__Quest__59063A47" FromRole="Quest" ToRole="HeroInQuest" />
           <Property Name="Complexity" Type="Int32" />
+          <NavigationProperty Name="HeroInQuest" Relationship="TheWitcherModel.FK__HeroInQue__Quest__59063A47" FromRole="Quest" ToRole="HeroInQuest" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="principal_id" Type="Int32" Nullable="false" />
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
@@ -358,11 +402,11 @@
           <Property Name="WeaponType" Type="Int32" />
           <Property Name="PriceOfBuy" Type="Decimal" Precision="10" Scale="4" />
           <Property Name="WeaponAccessLevel" Type="Int32" />
-          <Property Name="WeaponWeight" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="WeaponWeight" Type="Int32" />
           <Property Name="Characteristics" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="HeroWeapon" Relationship="Self.FK__HeroWeapo__Weapo__4BAC3F29" FromRole="Weapons" ToRole="HeroWeapon" />
-          <NavigationProperty Name="WeaponsType" Relationship="Self.FK__Weapons__WeaponT__68487DD7" FromRole="Weapons" ToRole="WeaponsType" />
           <Property Name="CombatPower" Type="Int32" />
+          <NavigationProperty Name="HeroWeapon" Relationship="TheWitcherModel.FK__HeroWeapo__Weapo__4BAC3F29" FromRole="Weapons" ToRole="HeroWeapon" />
+          <NavigationProperty Name="WeaponsType" Relationship="TheWitcherModel.FK__Weapons__WeaponT__68487DD7" FromRole="Weapons" ToRole="WeaponsType" />
         </EntityType>
         <EntityType Name="WeaponsType">
           <Key>
@@ -371,11 +415,11 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="WeaponsType1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="TypeCharacteristics" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Weapons" Relationship="Self.FK__Weapons__WeaponT__68487DD7" FromRole="WeaponsType" ToRole="Weapons" />
+          <NavigationProperty Name="Weapons" Relationship="TheWitcherModel.FK__Weapons__WeaponT__68487DD7" FromRole="WeaponsType" ToRole="Weapons" />
         </EntityType>
         <Association Name="FK__Clothes__Clothes__693CA210">
-          <End Role="ClothesType" Type="Self.ClothesType" Multiplicity="0..1" />
-          <End Role="Clothes" Type="Self.Clothes" Multiplicity="*" />
+          <End Type="TheWitcherModel.ClothesType" Role="ClothesType" Multiplicity="0..1" />
+          <End Type="TheWitcherModel.Clothes" Role="Clothes" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ClothesType">
               <PropertyRef Name="Id" />
@@ -386,8 +430,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__HeroCloth__Cloth__52593CB8">
-          <End Role="Clothes" Type="Self.Clothes" Multiplicity="0..1" />
-          <End Role="HeroClothes" Type="Self.HeroClothes" Multiplicity="*" />
+          <End Type="TheWitcherModel.Clothes" Role="Clothes" Multiplicity="0..1" />
+          <End Type="TheWitcherModel.HeroClothes" Role="HeroClothes" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Clothes">
               <PropertyRef Name="Id" />
@@ -398,8 +442,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__HeroCloth__HeroI__5165187F">
-          <End Role="Heroes" Type="Self.Heroes" Multiplicity="0..1" />
-          <End Role="HeroClothes" Type="Self.HeroClothes" Multiplicity="*" />
+          <End Type="TheWitcherModel.Heroes" Role="Heroes" Multiplicity="0..1" />
+          <End Type="TheWitcherModel.HeroClothes" Role="HeroClothes" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Heroes">
               <PropertyRef Name="Id" />
@@ -410,8 +454,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__HeroInQue__HeroI__5812160E">
-          <End Role="Heroes" Type="Self.Heroes" Multiplicity="0..1" />
-          <End Role="HeroInQuest" Type="Self.HeroInQuest" Multiplicity="*" />
+          <End Type="TheWitcherModel.Heroes" Role="Heroes" Multiplicity="0..1" />
+          <End Type="TheWitcherModel.HeroInQuest" Role="HeroInQuest" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Heroes">
               <PropertyRef Name="Id" />
@@ -422,8 +466,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__HeroWeapo__HeroI__4AB81AF0">
-          <End Role="Heroes" Type="Self.Heroes" Multiplicity="0..1" />
-          <End Role="HeroWeapon" Type="Self.HeroWeapon" Multiplicity="*" />
+          <End Type="TheWitcherModel.Heroes" Role="Heroes" Multiplicity="0..1" />
+          <End Type="TheWitcherModel.HeroWeapon" Role="HeroWeapon" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Heroes">
               <PropertyRef Name="Id" />
@@ -434,8 +478,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__HeroInQue__Quest__59063A47">
-          <End Role="Quest" Type="Self.Quest" Multiplicity="0..1" />
-          <End Role="HeroInQuest" Type="Self.HeroInQuest" Multiplicity="*" />
+          <End Type="TheWitcherModel.Quest" Role="Quest" Multiplicity="0..1" />
+          <End Type="TheWitcherModel.HeroInQuest" Role="HeroInQuest" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Quest">
               <PropertyRef Name="Id" />
@@ -446,8 +490,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__HeroWeapo__Weapo__4BAC3F29">
-          <End Role="Weapons" Type="Self.Weapons" Multiplicity="0..1" />
-          <End Role="HeroWeapon" Type="Self.HeroWeapon" Multiplicity="*" />
+          <End Type="TheWitcherModel.Weapons" Role="Weapons" Multiplicity="0..1" />
+          <End Type="TheWitcherModel.HeroWeapon" Role="HeroWeapon" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Weapons">
               <PropertyRef Name="Id" />
@@ -458,8 +502,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Weapons__WeaponT__68487DD7">
-          <End Role="WeaponsType" Type="Self.WeaponsType" Multiplicity="0..1" />
-          <End Role="Weapons" Type="Self.Weapons" Multiplicity="*" />
+          <End Type="TheWitcherModel.WeaponsType" Role="WeaponsType" Multiplicity="0..1" />
+          <End Type="TheWitcherModel.Weapons" Role="Weapons" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WeaponsType">
               <PropertyRef Name="Id" />
@@ -469,50 +513,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="TheWitcherEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Clothes" EntityType="Self.Clothes" />
-          <EntitySet Name="ClothesType" EntityType="Self.ClothesType" />
-          <EntitySet Name="HeroClothes" EntityType="Self.HeroClothes" />
-          <EntitySet Name="Heroes" EntityType="Self.Heroes" />
-          <EntitySet Name="HeroInQuest" EntityType="Self.HeroInQuest" />
-          <EntitySet Name="HeroWeapon" EntityType="Self.HeroWeapon" />
-          <EntitySet Name="Quest" EntityType="Self.Quest" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="Weapons" EntityType="Self.Weapons" />
-          <EntitySet Name="WeaponsType" EntityType="Self.WeaponsType" />
-          <AssociationSet Name="FK__Clothes__Clothes__693CA210" Association="Self.FK__Clothes__Clothes__693CA210">
-            <End Role="ClothesType" EntitySet="ClothesType" />
-            <End Role="Clothes" EntitySet="Clothes" />
-          </AssociationSet>
-          <AssociationSet Name="FK__HeroCloth__Cloth__52593CB8" Association="Self.FK__HeroCloth__Cloth__52593CB8">
-            <End Role="Clothes" EntitySet="Clothes" />
-            <End Role="HeroClothes" EntitySet="HeroClothes" />
-          </AssociationSet>
-          <AssociationSet Name="FK__HeroCloth__HeroI__5165187F" Association="Self.FK__HeroCloth__HeroI__5165187F">
-            <End Role="Heroes" EntitySet="Heroes" />
-            <End Role="HeroClothes" EntitySet="HeroClothes" />
-          </AssociationSet>
-          <AssociationSet Name="FK__HeroInQue__HeroI__5812160E" Association="Self.FK__HeroInQue__HeroI__5812160E">
-            <End Role="Heroes" EntitySet="Heroes" />
-            <End Role="HeroInQuest" EntitySet="HeroInQuest" />
-          </AssociationSet>
-          <AssociationSet Name="FK__HeroWeapo__HeroI__4AB81AF0" Association="Self.FK__HeroWeapo__HeroI__4AB81AF0">
-            <End Role="Heroes" EntitySet="Heroes" />
-            <End Role="HeroWeapon" EntitySet="HeroWeapon" />
-          </AssociationSet>
-          <AssociationSet Name="FK__HeroInQue__Quest__59063A47" Association="Self.FK__HeroInQue__Quest__59063A47">
-            <End Role="Quest" EntitySet="Quest" />
-            <End Role="HeroInQuest" EntitySet="HeroInQuest" />
-          </AssociationSet>
-          <AssociationSet Name="FK__HeroWeapo__Weapo__4BAC3F29" Association="Self.FK__HeroWeapo__Weapo__4BAC3F29">
-            <End Role="Weapons" EntitySet="Weapons" />
-            <End Role="HeroWeapon" EntitySet="HeroWeapon" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Weapons__WeaponT__68487DD7" Association="Self.FK__Weapons__WeaponT__68487DD7">
-            <End Role="WeaponsType" EntitySet="WeaponsType" />
-            <End Role="Weapons" EntitySet="Weapons" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -523,68 +523,68 @@
             <EntityTypeMapping TypeName="TheWitcherModel.Clothes">
               <MappingFragment StoreEntitySet="Clothes">
                 <ScalarProperty Name="CombatPower" ColumnName="CombatPower" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ClothesType" ColumnName="ClothesType" />
-                <ScalarProperty Name="PriceOfBuy" ColumnName="PriceOfBuy" />
-                <ScalarProperty Name="ClothesAccessLevel" ColumnName="ClothesAccessLevel" />
-                <ScalarProperty Name="ClothesWeight" ColumnName="ClothesWeight" />
-                <ScalarProperty Name="Characteristics" ColumnName="Characteristics" />
                 <ScalarProperty Name="Colour" ColumnName="Colour" />
+                <ScalarProperty Name="Characteristics" ColumnName="Characteristics" />
+                <ScalarProperty Name="ClothesWeight" ColumnName="ClothesWeight" />
+                <ScalarProperty Name="ClothesAccessLevel" ColumnName="ClothesAccessLevel" />
+                <ScalarProperty Name="PriceOfBuy" ColumnName="PriceOfBuy" />
+                <ScalarProperty Name="ClothesType" ColumnName="ClothesType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClothesType">
             <EntityTypeMapping TypeName="TheWitcherModel.ClothesType">
               <MappingFragment StoreEntitySet="ClothesType">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ClothesType1" ColumnName="ClothesType" />
                 <ScalarProperty Name="TypeCharacteristics" ColumnName="TypeCharacteristics" />
+                <ScalarProperty Name="ClothesType1" ColumnName="ClothesType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HeroClothes">
             <EntityTypeMapping TypeName="TheWitcherModel.HeroClothes">
               <MappingFragment StoreEntitySet="HeroClothes">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="HeroId" ColumnName="HeroId" />
-                <ScalarProperty Name="ClothesId" ColumnName="ClothesId" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="PriceOfSell" ColumnName="PriceOfSell" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ClothesId" ColumnName="ClothesId" />
+                <ScalarProperty Name="HeroId" ColumnName="HeroId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Heroes">
             <EntityTypeMapping TypeName="TheWitcherModel.Heroes">
               <MappingFragment StoreEntitySet="Heroes">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="HeroName" ColumnName="HeroName" />
-                <ScalarProperty Name="HeroMoney" ColumnName="HeroMoney" />
-                <ScalarProperty Name="HeroLevel" ColumnName="HeroLevel" />
-                <ScalarProperty Name="Playable" ColumnName="Playable" />
-                <ScalarProperty Name="HeroDescription" ColumnName="HeroDescription" />
-                <ScalarProperty Name="AvailableWeight" ColumnName="AvailableWeight" />
                 <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
+                <ScalarProperty Name="AvailableWeight" ColumnName="AvailableWeight" />
+                <ScalarProperty Name="HeroDescription" ColumnName="HeroDescription" />
+                <ScalarProperty Name="Playable" ColumnName="Playable" />
+                <ScalarProperty Name="HeroLevel" ColumnName="HeroLevel" />
+                <ScalarProperty Name="HeroMoney" ColumnName="HeroMoney" />
+                <ScalarProperty Name="HeroName" ColumnName="HeroName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HeroInQuest">
             <EntityTypeMapping TypeName="TheWitcherModel.HeroInQuest">
               <MappingFragment StoreEntitySet="HeroInQuest">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="HeroId" ColumnName="HeroId" />
-                <ScalarProperty Name="QuestId" ColumnName="QuestId" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="QuestId" ColumnName="QuestId" />
+                <ScalarProperty Name="HeroId" ColumnName="HeroId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HeroWeapon">
             <EntityTypeMapping TypeName="TheWitcherModel.HeroWeapon">
               <MappingFragment StoreEntitySet="HeroWeapon">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="HeroId" ColumnName="HeroId" />
-                <ScalarProperty Name="WeaponId" ColumnName="WeaponId" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="PriceOfSell" ColumnName="PriceOfSell" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="WeaponId" ColumnName="WeaponId" />
+                <ScalarProperty Name="HeroId" ColumnName="HeroId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -592,22 +592,22 @@
             <EntityTypeMapping TypeName="TheWitcherModel.Quest">
               <MappingFragment StoreEntitySet="Quest">
                 <ScalarProperty Name="Complexity" ColumnName="Complexity" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="QuestName" ColumnName="QuestName" />
-                <ScalarProperty Name="Award" ColumnName="Award" />
-                <ScalarProperty Name="LeadTime" ColumnName="LeadTime" />
                 <ScalarProperty Name="AccessLevel" ColumnName="AccessLevel" />
+                <ScalarProperty Name="LeadTime" ColumnName="LeadTime" />
+                <ScalarProperty Name="Award" ColumnName="Award" />
+                <ScalarProperty Name="QuestName" ColumnName="QuestName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="TheWitcherModel.sysdiagrams">
               <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -615,21 +615,21 @@
             <EntityTypeMapping TypeName="TheWitcherModel.Weapons">
               <MappingFragment StoreEntitySet="Weapons">
                 <ScalarProperty Name="CombatPower" ColumnName="CombatPower" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="WeaponType" ColumnName="WeaponType" />
-                <ScalarProperty Name="PriceOfBuy" ColumnName="PriceOfBuy" />
-                <ScalarProperty Name="WeaponAccessLevel" ColumnName="WeaponAccessLevel" />
-                <ScalarProperty Name="WeaponWeight" ColumnName="WeaponWeight" />
                 <ScalarProperty Name="Characteristics" ColumnName="Characteristics" />
+                <ScalarProperty Name="WeaponWeight" ColumnName="WeaponWeight" />
+                <ScalarProperty Name="WeaponAccessLevel" ColumnName="WeaponAccessLevel" />
+                <ScalarProperty Name="PriceOfBuy" ColumnName="PriceOfBuy" />
+                <ScalarProperty Name="WeaponType" ColumnName="WeaponType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="WeaponsType">
             <EntityTypeMapping TypeName="TheWitcherModel.WeaponsType">
               <MappingFragment StoreEntitySet="WeaponsType">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="WeaponsType1" ColumnName="WeaponsType" />
                 <ScalarProperty Name="TypeCharacteristics" ColumnName="TypeCharacteristics" />
+                <ScalarProperty Name="WeaponsType1" ColumnName="WeaponsType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

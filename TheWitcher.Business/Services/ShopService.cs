@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TheWitcher.Business.Interfaces;
-using TheWitcher.Core;
+using TheWitcher.DataAccess.Core;
 using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.Domain.Mappers;
 using TheWitcher.Domain.Models;

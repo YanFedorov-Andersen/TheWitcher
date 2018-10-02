@@ -5,6 +5,7 @@
         Quests,
         Stores,
         Statisctic,
+        CurrentQuestProgress,
         Exit
     }
 }

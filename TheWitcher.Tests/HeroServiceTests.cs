@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using TheWitcher.Business;
 using TheWitcher.Business.Interfaces;
-using TheWitcher.Core;
+using TheWitcher.DataAccess.Core;
 using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.Domain.Mappers;
 using TheWitcher.Domain.Models;
@@ -17,7 +17,6 @@ namespace TheWitcher.Tests
     {
         Mock<IUnitOfWork> mockUnitOfWork;
         Mock<IMapper<Heroes, HeroesDTO>> mockMapHeroes;
-        HeroService heroService;
         Mock<IRepository<Heroes>> mockIHeroRepository;
         Mock<IRepository<Quest>> mockIQuestRepository;
         Mock<IRepository<HeroInQuest>> mockIHeroInQuestRepository;
@@ -29,7 +28,6 @@ namespace TheWitcher.Tests
         {
             mockUnitOfWork = new Mock<IUnitOfWork>();
             mockMapHeroes = new Mock<IMapper<Heroes, HeroesDTO>>();
-
             mockIHeroRepository = new Mock<IRepository<Heroes>>();
             mockIQuestRepository = new Mock<IRepository<Quest>>();
             mockIHeroInQuestRepository = new Mock<IRepository<HeroInQuest>>();
@@ -38,7 +36,7 @@ namespace TheWitcher.Tests
             mockIWeaponsRepository = new Mock<IRepository<Weapons>>();
             mockIHeroWeaponRepository = new Mock<IRepository<HeroWeapon>>();
         }
-        
+
         [Fact]
         public void GetHeroDTOTestByNegativeId()
         {

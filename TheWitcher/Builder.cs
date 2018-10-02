@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using TheWitcher.DataAccess.Realization;
-using TheWitcher.Core;
+using TheWitcher.DataAccess.Core;
 using TheWitcher.Business;
 using TheWitcher.Domain.Mappers;
 using DataAccessLayer.Interfaces;
@@ -16,7 +16,7 @@ namespace TheWitcher
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().SingleInstance();
 
             builder.RegisterType<MapHeroes>().As<IMapper<Heroes, HeroesDTO>>();
             builder.RegisterType<MapQuest>().As<IMapper<Quest, QuestDTO>>();
@@ -47,7 +47,6 @@ namespace TheWitcher
             IShopService shopService = container.Resolve<IShopService>();
 
             Menu menu = container.Resolve<Menu>();
-
 
             menu.Greeting();
             menu.GameMenu();
