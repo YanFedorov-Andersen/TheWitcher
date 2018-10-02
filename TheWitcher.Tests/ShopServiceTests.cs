@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheWitcher.Business.Services;
-using TheWitcher.Core;
+using TheWitcher.DataAccess.Core;
 using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.Domain.Mappers;
 using TheWitcher.Domain.Models;
@@ -61,7 +61,6 @@ namespace TheWitcher.Tests
         {
             //arrange
             mockIWeaponsRepository.Setup(x => x.GetItemList());
-
             mockUnitOfWork.Setup(x => x.Hero).Returns(mockIHeroRepository.Object);
             mockUnitOfWork.Setup(x => x.Weapon).Returns(mockIWeaponsRepository.Object);
 
@@ -78,7 +77,6 @@ namespace TheWitcher.Tests
         {
             //arrange
             mockIClothesRepository.Setup(x => x.GetItemList());
-
             mockUnitOfWork.Setup(x => x.Clothes).Returns(mockIClothesRepository.Object);
 
             var shopService = new ShopService(mockUnitOfWork.Object, mockMapWeapons.Object, mockMapClothes.Object, mockMapHeroClothes.Object, mockMapHeroWeapons.Object);
@@ -94,7 +92,6 @@ namespace TheWitcher.Tests
         {
             //arrange
             mockIWeaponsRepository.Setup(x => x.GetItemList());
-
             mockUnitOfWork.Setup(x => x.Weapon).Returns(mockIWeaponsRepository.Object);
 
             var shopService = new ShopService(mockUnitOfWork.Object, mockMapWeapons.Object, mockMapClothes.Object, mockMapHeroClothes.Object, mockMapHeroWeapons.Object);
@@ -129,7 +126,6 @@ namespace TheWitcher.Tests
             List<Weapons> weaponsList = new List<Weapons>() { weapons };
             mockIWeaponsRepository.Setup(x => x.GetItemList()).Returns(weaponsList);
             mockMapWeapons.Setup(x => x.AutoMap(weapons)).Returns(weaponsDTO);
-
             mockUnitOfWork.Setup(x => x.Weapon).Returns(mockIWeaponsRepository.Object);
 
             var shopService = new ShopService(mockUnitOfWork.Object, mockMapWeapons.Object, mockMapClothes.Object, mockMapHeroClothes.Object, mockMapHeroWeapons.Object);
@@ -163,7 +159,6 @@ namespace TheWitcher.Tests
             List<Clothes> clothesList = new List<Clothes>() { clothes };
             mockIClothesRepository.Setup(x => x.GetItemList()).Returns(clothesList);
             mockMapClothes.Setup(x => x.AutoMap(clothes)).Returns(clothesDTO);
-
             mockUnitOfWork.Setup(x => x.Clothes).Returns(mockIClothesRepository.Object);
 
             var shopService = new ShopService(mockUnitOfWork.Object, mockMapWeapons.Object, mockMapClothes.Object, mockMapHeroClothes.Object, mockMapHeroWeapons.Object);
@@ -218,7 +213,7 @@ namespace TheWitcher.Tests
                 HeroLevel = 1,
                 Playable = true,
                 ReleaseDate = new DateTime(2011, 6, 10, 15, 24, 16),
-                HeroWeapon = {heroWeapon}
+                HeroWeapon = { heroWeapon }
             };
             List<Weapons> weaponsList = new List<Weapons>() { weapons };
             mockIHeroRepository.Setup(x => x.GetItem(4)).Returns(hero);
@@ -280,7 +275,7 @@ namespace TheWitcher.Tests
                 Playable = true,
                 ReleaseDate = new DateTime(2011, 6, 10, 15, 24, 16),
                 HeroClothes = { heroClothes }
-            }; 
+            };
             List<Clothes> weaponsList = new List<Clothes>() { clothes };
             mockIHeroRepository.Setup(x => x.GetItem(4)).Returns(hero);
             mockMapHeroClothes.Setup(x => x.AutoMap(heroClothes)).Returns(heroClothesDTO);

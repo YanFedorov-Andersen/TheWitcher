@@ -48,7 +48,6 @@ namespace TheWitcher
 
             Menu menu = container.Resolve<Menu>();
 
-
             menu.Greeting();
             menu.GameMenu();
         }

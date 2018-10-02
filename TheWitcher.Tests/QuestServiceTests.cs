@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheWitcher.Business;
-using TheWitcher.Core;
+using TheWitcher.DataAccess.Core;
 using TheWitcher.DataAccess.Interfaces;
 using TheWitcher.Domain.Mappers;
 using TheWitcher.Domain.Models;
@@ -27,6 +27,7 @@ namespace TheWitcher.Tests
             mockIQuestRepository = new Mock<IRepository<Quest>>();
             mockIHeroRepository = new Mock<IRepository<Heroes>>();
         }
+
         [Fact]
         public void GetNameIdLeadTimeQuestsTestByNullQuest()
         {
@@ -45,6 +46,7 @@ namespace TheWitcher.Tests
         [Fact]
         public void GetNameIdLeadTimeQuestsTest()
         {
+            //arrange
             Heroes hero = new Heroes()
             {
                 HeroMoney = 50,
@@ -81,7 +83,6 @@ namespace TheWitcher.Tests
                 HeroTotalPower = 55
             };
             List<Quest> questList = new List<Quest>() { quest };
-            //arrange
             mockIUnitOfWork.Setup(x => x.Quest).Returns(mockIQuestRepository.Object);
             mockIQuestRepository.Setup(x => x.GetItemList()).Returns(questList);
             mockMapQuest.Setup(x => x.AutoMap(quest)).Returns(questDTO);
@@ -129,6 +130,7 @@ namespace TheWitcher.Tests
             mockIHeroRepository.Setup(x => x.GetItem(4)).Returns(hero);
 
             var questService = new QuestService(mockIUnitOfWork.Object, mockMapQuest.Object);
+
             //act
             var testResult = questService.GetHeroQuestProgress(4);
 

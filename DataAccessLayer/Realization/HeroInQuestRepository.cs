@@ -1,11 +1,8 @@
 ﻿using TheWitcher.DataAccess.Core;
 using TheWitcher.DataAccess.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TheWitcher.DataAccess.Realization
 {
