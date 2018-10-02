@@ -32,12 +32,12 @@ namespace TheWitcher.Business
             var listQuestDTO = new List<QuestDTO>();
             if (hero != null && hero.HeroTotalPower >= 0)
             {
-                IEnumerable<Quest> quests = _questRepository.GetItemList()?.Where(x => x.Complexity.Value <= hero.HeroTotalPower).ToList();
-                if(quests == null)
+                IEnumerable<Quest> quests = _questRepository.GetItemList().Where(x => x.Complexity.Value <= hero.HeroTotalPower).ToList();
+                if (quests == null)
                 {
                     return null;
                 }
-                foreach(var quest in quests)
+                foreach (var quest in quests)
                 {
                     listQuestDTO.Add(_mapQuest.AutoMap(quest));
                 }
@@ -54,21 +54,12 @@ namespace TheWitcher.Business
 
             var hero = _heroRepository.GetItem(heroId);
 
-            if (hero == null || hero.HeroInQuest == null)
+            if (hero == null || hero.HeroInQuest == null || hero.HeroInQuest.Count != 1)
             {
                 return -1;
             }
 
-            HeroInQuest heroQuest;
-
-            if (hero.HeroInQuest.Count == 1)
-            {
-                heroQuest = hero.HeroInQuest.Single();
-            }
-            else
-            {
-                return -1;
-            }
+            HeroInQuest heroQuest = hero.HeroInQuest.Single();
 
             if (hero.ReleaseDate == null || heroQuest.StartTime == null)
             {

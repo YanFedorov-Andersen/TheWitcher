@@ -26,6 +26,7 @@ namespace TheWitcher.Business
         private const bool ITEM_INITIAL_STATE = false;
         private const int BASIC_QUEST_AWARD = 150;
         private const int SECONDS_IN_MINUTE = 60;
+        private const int DEFAULT_HEROQUEST_ID = 6;
 
         public HeroService(IUnitOfWork unitOfWork, IMapper<Heroes, HeroesDTO> mapHeroes)
         {
@@ -112,14 +113,23 @@ namespace TheWitcher.Business
 
             var activeHeroQuests = hero.HeroInQuest.ToList();
 
-            foreach(var quest in activeHeroQuests)
+            foreach (var quest in activeHeroQuests)
             {
-                if(hero.ReleaseDate.Value < DateTime.Now)
+                if (hero.ReleaseDate.Value < DateTime.Now)
                 {
+                    _unitOfWork.BeginTransaction();
                     hero.HeroMoney += quest.Quest.Award;
-                    _heroInQuestRepository.Delete(quest.Id);
-                    hero.HeroLevel += 1;
+                    int resultOfDeleteOperation = _heroInQuestRepository.Delete(quest.Id);
+
+                    if (resultOfDeleteOperation == -1)
+                    {
+                        _unitOfWork.RollBack();
+                        return false;
+                    }
+
+                    hero.HeroLevel++;
                     _heroRepository.Update(hero);
+                    _unitOfWork.EndTransaction();
                 }
             }
             return true;
@@ -135,11 +145,7 @@ namespace TheWitcher.Business
             var hero = _heroRepository.GetItem(heroId);
             var quest = _questRepository.GetItem(questId);
 
-            if (hero == null || quest == null)
-            {
-                return false;
-            }
-            if (hero.HeroInQuest.Count != 0)
+            if (hero == null || quest == null || hero.HeroInQuest.Count != 0)
             {
                 return false;
             }
@@ -154,7 +160,7 @@ namespace TheWitcher.Business
 
                     HeroInQuest heroInQuest = new HeroInQuest()
                     {
-                        Id = 6,
+                        Id = DEFAULT_HEROQUEST_ID,
                         Heroes = hero,
                         Quest = quest,
                         HeroId = heroId,
