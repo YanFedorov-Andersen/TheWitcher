@@ -64,7 +64,6 @@ namespace TheWitcher
         private void GetCurrentQuestProgress()
         {
             Console.WriteLine("Текущий прогресс квеста:");
-            _heroService.CheckHeroQuests(DEFAULT_HERO_ID);
             var percentOfProgress = _questService.GetHeroQuestProgress(DEFAULT_HERO_ID);
 
             if(percentOfProgress == -1)

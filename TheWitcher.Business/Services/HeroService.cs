@@ -119,10 +119,9 @@ namespace TheWitcher.Business
                     hero.HeroMoney += quest.Quest.Award;
                     _heroInQuestRepository.Delete(quest.Id);
                     hero.HeroLevel += 1;
+                    _heroRepository.Update(hero);
                 }
             }
-
-            _heroRepository.Update(hero);
             return true;
         }
 
@@ -155,6 +154,9 @@ namespace TheWitcher.Business
 
                     HeroInQuest heroInQuest = new HeroInQuest()
                     {
+                        Id = 6,
+                        Heroes = hero,
+                        Quest = quest,
                         HeroId = heroId,
                         QuestId = questId,
                         StartTime = DateTime.Now,
@@ -250,7 +252,7 @@ namespace TheWitcher.Business
             if (hero.HeroMoney > weapon.PriceOfBuy && hero.AvailableWeight > weapon.WeaponWeight.Value)
             {
                 hero.HeroMoney -= weapon.PriceOfBuy;
-                hero.AvailableWeight -= Convert.ToInt32(weapon.WeaponWeight.Value);
+                hero.AvailableWeight -= weapon.WeaponWeight.Value;
                 HeroWeapon heroWeapon = new HeroWeapon()
                 {
                     HeroId = heroId,
@@ -305,14 +307,7 @@ namespace TheWitcher.Business
             }
 
             hero.HeroMoney += heroWeapon.PriceOfSell;
-            try
-            {
-                hero.AvailableWeight += Convert.ToInt32(weapon.WeaponWeight.Value);
-            }
-            catch (OverflowException exeption)
-            {
-                throw new OverflowException("Can not convert decimal to int becouse of OverFlow", exeption);
-            }
+            hero.AvailableWeight += weapon.WeaponWeight.Value;
 
             _unitOfWork.BeginTransaction();
 

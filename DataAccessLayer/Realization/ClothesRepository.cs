@@ -1,8 +1,8 @@
-﻿using TheWitcher.Core;
-using TheWitcher.DataAccess.Interfaces;
+﻿using TheWitcher.DataAccess.Interfaces;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using TheWitcher.DataAccess.Core;
 
 namespace TheWitcher.DataAccess.Realization
 {

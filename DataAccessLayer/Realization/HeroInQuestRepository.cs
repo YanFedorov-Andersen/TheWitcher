@@ -1,4 +1,4 @@
-﻿using TheWitcher.Core;
+﻿using TheWitcher.DataAccess.Core;
 using TheWitcher.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
 ﻿using TheWitcher.DataAccess.Interfaces;
-using TheWitcher.Core;
+using TheWitcher.DataAccess.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
